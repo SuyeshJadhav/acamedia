@@ -1,21 +1,28 @@
 const { firestoreDB } = require("../firebaseConfig");
-const { query, where, getDoc, collection } = require("firebase/firestore");
 
-const loginUser = async () => {
-  const value = "dhruv@somaiya.edu";
-  const userRef = firestoreDB.collection("users");
-  const q = query(userRef, where("email", "==", value));
+const loginUser = async (req, res, next) => {
+  try {
+    const { email, pass } = req.body;
 
-  q.get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        console.log(data);
-      });
-    })
-    .catch((error) => {
-      console.error("Error getting documents:", error);
+    const userRef = firestoreDB.collection("users");
+    const query = userRef.where("email", "==", email);
+    const result = await query.get();
+
+    if (result.empty) {
+      throw new Error("User not found");
+    }
+
+    result.forEach((doc) => {
+      const { password } = doc.data();
+      if (password != pass) {
+        throw new Error("Incorrect Password");
+      } else {
+        return res.status(201).json(doc.data());
+      }
     });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = loginUser;
