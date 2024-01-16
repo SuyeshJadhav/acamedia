@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final List<Chat> sampleChats = [
     const Chat(
@@ -49,28 +57,29 @@ class HomePage extends StatelessWidget {
         imageUrl: 'https://example.com/profile2.jpg',
         recentMessage: 'Check out this video!',
         hasUnseenMessages: false),
-    const Chat(
-        name: 'Jane Smith',
-        imageUrl: 'https://example.com/profile2.jpg',
-        recentMessage: 'Check out this video!',
-        hasUnseenMessages: false),
-    const Chat(
-        name: 'Jane Smith',
-        imageUrl: 'https://example.com/profile2.jpg',
-        recentMessage: 'Check out this video!',
-        hasUnseenMessages: false),
-    const Chat(
-        name: 'Jane Smith',
-        imageUrl: 'https://example.com/profile2.jpg',
-        recentMessage: 'Check out this video!',
-        hasUnseenMessages: false),
-    // ... add more sample chats as needed
+    // const Chat(
+    //     name: 'Jane Smith',
+    //     imageUrl: 'https://example.com/profile2.jpg',
+    //     recentMessage: 'Check out this video!',
+    //     hasUnseenMessages: false),
+    // const Chat(
+    //     name: 'Jane Smith',
+    //     imageUrl: 'https://example.com/profile2.jpg',
+    //     recentMessage: 'Check out this video!',
+    //     hasUnseenMessages: false),
+    // const Chat(
+    //     name: 'Jane Smith',
+    //     imageUrl: 'https://example.com/profile2.jpg',
+    //     recentMessage: 'Check out this video!',
+    //     hasUnseenMessages: false),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
+        toolbarHeight: 65.0,
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
         title: const Text(
@@ -80,30 +89,80 @@ class HomePage extends StatelessWidget {
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _scaffoldKey.currentState?.openEndDrawer();
+            },
             icon: const Padding(
-              padding: EdgeInsets.only(right: 40), // Adjust padding as needed
+              padding: EdgeInsets.only(right: 40),
               child: Icon(Icons.menu),
             ),
           ),
         ],
       ),
+      endDrawer: Padding(
+        padding: const EdgeInsets.only(top: 52.0),
+        child: Drawer(
+          width: 65.0,
+          child: Container(
+            color: const Color.fromRGBO(229, 245, 228, 1),
+            child: ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              children: [
+                Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            'https://example.com/profile_image.jpg'),
+                        radius: 25.0,
+                      ),
+                    ),
+                    ListTile(
+                      contentPadding: const EdgeInsets.only(
+                        left: 21.0,
+                        top: 10.0,
+                      ),
+                      leading: const Icon(
+                        Icons.search_rounded,
+                        color: Colors.black,
+                        size: 27.0,
+                      ),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      contentPadding: const EdgeInsets.only(
+                        left: 22.0,
+                        top: 10.0,
+                      ),
+                      leading: const Icon(
+                        Icons.call,
+                        color: Colors.black,
+                      ),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      contentPadding: const EdgeInsets.only(
+                        left: 22.0,
+                        top: 10.0,
+                      ),
+                      leading: const Icon(
+                        Icons.settings,
+                        color: Colors.black,
+                      ),
+                      onTap: () {},
+                    ),
+                    // Add more ListTile items as needed
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       body: Column(
         children: [
-          Container(
-              color: Colors.white,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: const TextField(
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 1.0, horizontal: 11.0),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.zero),
-                  hintText: 'Search',
-                  suffixIcon: Icon(Icons.search),
-                ),
-              )),
-
           // Chat List
           Expanded(
             child: ListView.builder(
@@ -141,23 +200,24 @@ class ChatTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: ListTile(
-      tileColor: const Color.fromARGB(255, 245, 245, 245),
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(chat.imageUrl),
-        // backgroundColor: const Color.fromRGBO(228, 245, 245, 1),
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
-        radius: 30.0,
+      child: ListTile(
+        tileColor: const Color.fromARGB(255, 248, 248, 248),
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(chat.imageUrl),
+          backgroundColor: const Color.fromRGBO(228, 245, 245, 1),
+          // backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+          radius: 30.0,
+        ),
+        title: Text(chat.name),
+        subtitle: Text(chat.recentMessage),
+        trailing: chat.hasUnseenMessages
+            ? const Icon(Icons.circle,
+                color: Color.fromARGB(255, 38, 45, 37), size: 11)
+            : null,
+        onTap: () {
+          // Handle navigation to chat screen
+        },
       ),
-      title: Text(chat.name),
-      subtitle: Text(chat.recentMessage),
-      trailing: chat.hasUnseenMessages
-          ? const Icon(Icons.circle,
-              color: Color.fromARGB(255, 38, 45, 37), size: 11)
-          : null,
-      onTap: () {
-        // Handle navigation to chat screen
-      },
-    ));
+    );
   }
 }
