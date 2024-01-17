@@ -6,7 +6,8 @@ const loginUser = require("../controllers/userController");
 const router = Router();
 
 router.get("/login", async (req, res) => {
-  await loginUser();
+  const result = await loginUser();
+  res.send(result);
 });
 
 module.exports = router;
