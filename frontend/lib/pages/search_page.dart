@@ -10,20 +10,35 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        // appBar: AppBar(
-        //   title: const Text("Search Page"),
-        //   backgroundColor: const Color.fromARGB(252, 252, 252, 252),
-        //   elevation: 0,
-        // ),
-        body: Column(
-      children: [
-        SearchBar(),
-        Expanded(
-          child: Text("Results Here."),
+    return Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 65.0,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              color: Colors.black,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          title: const Text(
+            "Search Page",
+            style: TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0,
         ),
-      ],
-    ));
+        body: Container(
+          color: const Color.fromARGB(255, 248, 248, 248),
+          child: const Column(
+            children: [
+              SearchBar(),
+              Expanded(
+                child: Text("Results Here."),
+              ),
+            ],
+          ),
+        ));
   }
 }
 
@@ -45,9 +60,9 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
         child: TextField(
           onChanged: onChangedQuery,
           decoration: const InputDecoration(

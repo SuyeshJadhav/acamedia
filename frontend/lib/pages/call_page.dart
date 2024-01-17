@@ -12,7 +12,7 @@ class _CallPageState extends State<CallPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Call Page"),
+        title: const Text("Call Page"),
       ),
     );
   }
