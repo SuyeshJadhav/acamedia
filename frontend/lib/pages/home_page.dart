@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/call_page.dart';
+import 'package:frontend/pages/search_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -93,7 +95,7 @@ class _HomePageState extends State<HomePage> {
               _scaffoldKey.currentState?.openEndDrawer();
             },
             icon: const Padding(
-              padding: EdgeInsets.only(right: 40),
+              padding: EdgeInsets.only(right: 20),
               child: Icon(Icons.menu),
             ),
           ),
@@ -129,7 +131,12 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.black,
                         size: 27.0,
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SearchPage()));
+                      },
                     ),
                     ListTile(
                       contentPadding: const EdgeInsets.only(
@@ -140,7 +147,12 @@ class _HomePageState extends State<HomePage> {
                         Icons.call,
                         color: Colors.black,
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CallPage()));
+                      },
                     ),
                     ListTile(
                       contentPadding: const EdgeInsets.only(
