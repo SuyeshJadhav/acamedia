@@ -1,12 +1,15 @@
+const { compare, hash } = require("bcryptjs");
+
 const { firestoreDB } = require("../firebaseConfig");
-const nodemailer = require("nodemailer");
+const mailSender = require("../utils/mailSender");
+
+var genOTP;
 
 const generateOTP = () => {
-  var genOTP = Math.floor(
+  return Math.floor(
     Math.pow(10, 5 - 1) +
       Math.random() * (Math.pow(10, 5) - Math.pow(10, 5 - 1) - 1)
   );
-  return genOTP;
 };
 
 const verifyEmailandSendOTP = async (req, res) => {
@@ -21,40 +24,14 @@ const verifyEmailandSendOTP = async (req, res) => {
       throw new Error("User not found");
     }
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.NODEMAILER_USERNAME,
-        pass: process.env.NODEMAILER_PASSWORD,
-      },
-      // tls: {
-      //   rejectUnauthorized: false,
-      // },
-    });
+    genOTP = generateOTP();
 
-    const otp = generateOTP();
-
-    const msg = {
-      from: `"Acamedia Team" <${process.env.NODEMAILER_USERNAME}>`,
-      to: [
-        "dedhia.dr@somaiya.edu",
-        "aditya.chandran@somaiya.edu",
-        "suyesh.j@somaiya.edu",
-        "vedant.hc@somaiya.edu",
-      ],
-      subject: "Sending Email using Node.js/Node Mailer",
-      text: `OTP is ${otp}`,
-    };
-
-    transporter.sendMail(msg, (error, info) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Email sent: " + info.response);
-      }
-    });
+    try {
+      console.log("Gen OTP: ", genOTP);
+      mailSender(genOTP);
+    } catch (error) {
+      console.log(error);
+    }
 
     return res.status(201).json({ message: "OTP Sent Successfully" });
   } catch (error) {
@@ -68,13 +45,34 @@ const verifyOTP = async (req, res) => {
     console.log("OTP", otp);
     console.log("OTP GEN", genOTP);
 
+    if (genOTP != otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
     return res.status(201).json({ message: "OTP Verified" });
   } catch (error) {}
 };
 
 const setPassword = async (req, res) => {
   try {
-  } catch (error) {}
+    const { email, password } = req.body;
+
+    const userRef = firestoreDB.collection("users");
+    const query = userRef.where("email", "==", email);
+    const result = await query.get();
+
+    if (result.empty) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const hashedPass = await hash(password, 10);
+    result.forEach(async (doc) => {
+      await doc.ref.set({ password: hashedPass }, { merge: true });
+    });
+
+    return res.status(201).json({ message: "Password set" });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const loginUser = async (req, res) => {
@@ -89,12 +87,13 @@ const loginUser = async (req, res) => {
       throw new Error("User not found");
     }
 
-    result.forEach((doc) => {
+    result.forEach(async (doc) => {
       const { password } = doc.data();
-      if (password != pass) {
-        throw new Error("Incorrect Password");
-      } else {
+      const passMatch = await compare(pass, password);
+      if (passMatch) {
         return res.status(201).json(doc.data());
+      } else {
+        return res.status(400).json({ message: "Incorrect Password" });
       }
     });
   } catch (error) {
