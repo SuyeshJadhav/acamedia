@@ -14,7 +14,7 @@ class CallPageState extends State<CallPage> {
       appBar: AppBar(
         toolbarHeight: 65.0,
         leading: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
+          padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0),
           child: IconButton(
             icon: const Icon(Icons.arrow_back),
             color: Colors.black,
