@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/call_page.dart';
+import 'package:frontend/pages/profile_page.dart';
 import 'package:frontend/pages/search_page.dart';
+import 'package:frontend/pages/login_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  // ignore: library_private_types_in_public_api
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   final List<Chat> sampleChats = [
     const Chat(
       name: 'John Doe',
@@ -89,7 +92,7 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
         leading: Padding(
-          padding: const EdgeInsets.only(left: 9.0),
+          padding: const EdgeInsets.only(left: 10.0),
           child: IconButton(
             onPressed: () {
               _scaffoldKey.currentState?.openDrawer();
@@ -101,7 +104,7 @@ class _HomePageState extends State<HomePage> {
       drawer: Padding(
         padding: const EdgeInsets.only(top: 52.0),
         child: Drawer(
-          width: 220.0,
+          width: 210.0,
           child: Container(
             color: const Color.fromRGBO(229, 245, 228, 1),
             child: ListView(
@@ -109,15 +112,30 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.zero,
               children: [
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 13.0, bottom: 10.0),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 13.0, bottom: 11),
                       child: ListTile(
-                        title: Text("Name Name"),
-                        leading: CircleAvatar(
-                          foregroundImage: AssetImage('lib/assets/p1.jpg'),
-                          radius: 30.0,
+                        title: const Text("Name Name"),
+                        leading: GestureDetector(
+                          onTap: () {
+                            // Handle profile icon tap, navigate to profile page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProfilePage()), // Replace with your profile page widget
+                            );
+                          },
+                          child: const SizedBox(
+                            width: 60.0, // Adjust the width as needed
+                            child: CircleAvatar(
+                              foregroundImage: AssetImage('lib/assets/p1.jpg'),
+                              radius: 30.0,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -127,10 +145,13 @@ class _HomePageState extends State<HomePage> {
                           Icon(
                             Icons.search_rounded,
                             color: Colors.black,
-                            size: 27.0,
+                            size: 24.0,
                           ),
                           SizedBox(width: 15.0),
-                          Text("Search"),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 2.0),
+                            child: Text("Search"),
+                          ),
                         ],
                       ),
                       onTap: () {
@@ -148,10 +169,13 @@ class _HomePageState extends State<HomePage> {
                           Icon(
                             Icons.call_rounded,
                             color: Colors.black,
-                            size: 27.0,
+                            size: 24.0,
                           ),
                           SizedBox(width: 15.0),
-                          Text("Calls"),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 2.0),
+                            child: Text("Calls"),
+                          ),
                         ],
                       ),
                       onTap: () {
@@ -169,10 +193,13 @@ class _HomePageState extends State<HomePage> {
                           Icon(
                             Icons.settings_rounded,
                             color: Colors.black,
-                            size: 27.0,
+                            size: 24.0,
                           ),
                           SizedBox(width: 15.0),
-                          Text("Settings"),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 2.0),
+                            child: Text("Settings"),
+                          ),
                         ],
                       ),
                       onTap: () {
