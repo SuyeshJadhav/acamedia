@@ -52,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                           if (value == null || value.isEmpty) {
                             return 'Enter your username';
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -73,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                           if (value == null || value.isEmpty) {
                             return 'Enter your password';
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -104,7 +106,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  TextButton(
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -115,7 +119,9 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: const Text(
                         "Create Account",
-                      ))
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

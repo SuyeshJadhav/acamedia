@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/home_page.dart';
+// import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/login_page.dart';
 
 class SignupPage extends StatefulWidget {
@@ -54,6 +54,7 @@ class _SignupPageState extends State<SignupPage> {
                           if (value == null || value.isEmpty) {
                             return 'Enter your username';
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -75,6 +76,7 @@ class _SignupPageState extends State<SignupPage> {
                           if (value == null || value.isEmpty) {
                             return 'Enter your Email';
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -96,6 +98,7 @@ class _SignupPageState extends State<SignupPage> {
                           if (value == null || value.isEmpty) {
                             return 'Enter your password';
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -117,6 +120,7 @@ class _SignupPageState extends State<SignupPage> {
                           if (value == null || value.isEmpty) {
                             return 'Confirm Password';
                           }
+                          return null;
                         },
                       ),
                     ),

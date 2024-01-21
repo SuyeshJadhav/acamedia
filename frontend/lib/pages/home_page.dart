@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/call_page.dart';
 import 'package:frontend/pages/profile_page.dart';
 import 'package:frontend/pages/search_page.dart';
-import 'package:frontend/pages/login_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -125,8 +124,7 @@ class HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProfilePage()), // Replace with your profile page widget
+                                  builder: (context) => const ProfilePage()),
                             );
                           },
                           child: const SizedBox(

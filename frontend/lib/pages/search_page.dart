@@ -63,12 +63,17 @@ class _SearchBarState extends State<SearchBar> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-        child: TextField(
-          onChanged: onChangedQuery,
-          decoration: const InputDecoration(
-              labelText: "Search",
-              border: OutlineInputBorder(),
-              suffixIcon: Icon(Icons.search)),
+        child: Center(
+          child: SizedBox(
+            width: 350,
+            child: TextField(
+              onChanged: onChangedQuery,
+              decoration: const InputDecoration(
+                  labelText: "Search",
+                  border: OutlineInputBorder(),
+                  suffixIcon: Icon(Icons.search)),
+            ),
+          ),
         ),
       ),
     );
