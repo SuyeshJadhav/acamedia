@@ -26,10 +26,16 @@ class _SignupPageState extends State<SignupPage> {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       // You can use googleUser to get user details and implement your logic.
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
+      final uname = googleUser?.displayName;
+      final uemail = googleUser?.email;
+      final uid = googleUser?.id;
+      final uipath = googleUser?.photoUrl;
+      final uauth = googleUser?.serverAuthCode;
+      print(uname);
+      print(uemail);
+      print(uipath);
+      print(uid);
+      print(uauth);
     } catch (error) {
       print('Google Sign-In Error: $error');
     }
