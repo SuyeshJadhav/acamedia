@@ -91,7 +91,7 @@ class HomePageState extends State<HomePage> {
         ),
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
         leading: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
+          padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0),
           child: IconButton(
             onPressed: () {
               _scaffoldKey.currentState?.openDrawer();
