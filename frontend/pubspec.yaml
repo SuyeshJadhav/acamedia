@@ -12,6 +12,7 @@ dependencies:
   riverpod: ^2.4.9
   flutter_riverpod: ^2.4.9
   hooks_riverpod: ^2.4.9
+  toggle_switch: ^2.1.0
 
 dev_dependencies:
   flutter_test:
