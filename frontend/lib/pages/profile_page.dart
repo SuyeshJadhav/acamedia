@@ -36,22 +36,25 @@ class ProfilePageState extends State<ProfilePage> {
           Center(
             child: Column(
               children: [
-                const CircleAvatar(
-                  backgroundImage: AssetImage('lib/assets/p1.jpg'),
-                  radius: 100.0,
+                GestureDetector(
+                  onTap: () {},
+                  child: const CircleAvatar(
+                    backgroundImage: AssetImage('lib/assets/p1.jpg'),
+                    radius: 100.0,
+                  ),
                 ),
                 const SizedBox(height: 30),
                 const Text(
-                  'John Doe',
+                  'name name',
                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.start,
                 ),
                 const SizedBox(height: 8.0),
                 const Text(
-                  'john.doe@example.com',
+                  'nameless@gmail.com',
                   style: TextStyle(fontSize: 16.0, color: Colors.grey),
                 ),
-                const SizedBox(height: 16.0),
+                const SizedBox(height: 25.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
