@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/home_page.dart';
-import 'package:frontend/pages/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key});
@@ -13,9 +12,14 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final ButtonStyle loginButtonStyle = ButtonStyle(
-    backgroundColor:
-        MaterialStateProperty.all<Color>(const Color.fromRGBO(42, 82, 81, 1)),
+  final ButtonStyle loginButtonStyle = ElevatedButton.styleFrom(
+    backgroundColor: const Color.fromRGBO(42, 82, 81, 1),
+    fixedSize: const Size(90, 45),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(10),
+      ),
+    ),
   );
 
   @override
@@ -94,34 +98,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       );
                     },
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
-                      child: Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) => const SignupPage()),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        "Create Account",
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),

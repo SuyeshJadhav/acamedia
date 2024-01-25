@@ -261,7 +261,7 @@ class ChatTile extends StatelessWidget {
           backgroundImage: AssetImage(chat.imageUrl),
           // backgroundColor: const Color.fromRGBO(228, 245, 245, 1),
           // backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-          radius: 29.0,
+          radius: 25.0,
         ),
         title: Text(chat.name),
         subtitle: Text(chat.recentMessage),
