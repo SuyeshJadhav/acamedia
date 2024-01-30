@@ -1,21 +1,21 @@
 const { firestoreDB } = require("../firebaseConfig");
+const nodemailer = require("nodemailer");
 
 const loginUser = async () => {
   const value = "dhruv@somaiya.edu";
   const userRef = firestoreDB.collection("users");
-  const query = userRef.where("email", "==", value);
+  const q = query(userRef, where("email", "==", value));
 
-  try {
-    const querySnapshot = await query.get();
-    
-    querySnapshot.forEach((doc) => {
-      console.log(doc.data());
+  q.get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        console.log(data);
+      });
+    })
+    .catch((error) => {
+      console.error("Error getting documents:", error);
     });
-
-    return "banana";
-  } catch (error) {
-    console.error("Error getting documents:", error);
-  }
 };
 
-module.exports = loginUser;
+module.exports = { loginUser, verifyEmailandSendOTP, verifyOTP, setPassword };
