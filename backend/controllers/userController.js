@@ -1,104 +1,160 @@
-const { compare, hash } = require("bcryptjs");
-
+const bcrypt = require("bcryptjs");
+const admin = require("firebase-admin");
 const { firestoreDB } = require("../firebaseConfig");
-const mailSender = require("../utils/mailSender");
+const { usersCollectionName, usersIndexDocName } = require("../variableNames");
+const { getTimeStamp } = require("../helperFunctions");
 
-var genOTP;
+//---------------------- user creation ---------------------------
+const createUser = async (user) => {
+  const { fname, lname, email, role, branch, degree, password } = user;
 
-const generateOTP = () => {
-  return Math.floor(
-    Math.pow(10, 5 - 1) +
-      Math.random() * (Math.pow(10, 5) - Math.pow(10, 5 - 1) - 1)
-  );
-};
-
-const verifyEmailandSendOTP = async (req, res) => {
-  try {
-    const { email } = req.body;
-
-    const userRef = firestoreDB.collection("users");
-    const query = userRef.where("email", "==", email);
-    const result = await query.get();
-
-    if (result.empty) {
-      throw new Error("User not found");
-    }
-
-    genOTP = generateOTP();
-
-    try {
-      console.log("Gen OTP: ", genOTP);
-      mailSender(genOTP);
-    } catch (error) {
-      console.log(error);
-    }
-
-    return res.status(201).json({ message: "OTP Sent Successfully" });
-  } catch (error) {
-    console.log(error);
+  // check if user already exists with same email
+  const userExists = await checkUserInIndex(email);
+  if (!userExists) {
+    return { message: `Error checking for user.`, status: "UserCreationFail" };
   }
-};
+  else if (userExists !== "NoUser") {
+    return { message: `User already exists with email ${email}.`, status: "UserCreationFail" };
+  }
 
-const verifyOTP = async (req, res) => {
+  // hash password
+  const hashedPassword = await hashPassword(password);
+  if (!hashedPassword) {
+    return { message: `Unable to create new user`, status: `UserCreationFail` };
+  }
+
+  // create a new user object to avoid extra data to be added
+  const newUser = {
+    fname, lname, email, role, branch, degree,
+    password: hashedPassword,
+    timeStamp: getTimeStamp()
+  }
+  if (role.toLowerCase() === "student") {
+    newUser.year = user.year;
+    newUser.rollno = user.rollno;
+  }
+
   try {
-    const { otp } = req.body;
-    console.log("OTP", otp);
-    console.log("OTP GEN", genOTP);
-
-    if (genOTP != otp) {
-      return res.status(400).json({ message: "Invalid OTP" });
+    const userCollectionRef = firestoreDB.collection(usersCollectionName);
+    const newUserDoc = await userCollectionRef.add(newUser);
+    const newUserId = newUserDoc.id;
+    const userAdded = await addToUserIndex(email, newUserId);
+    if (!userAdded) {
+      console.log("Unable to add user to users index");
+      return { message: `Unable to create new user`, status: `UserCreationFail` };
     }
-    return res.status(201).json({ message: "OTP Verified" });
-  } catch (error) {}
-};
+    return { userId: newUserId, message: "User created successfully.", status: "UserCreationSuccess" };
+  } catch (error) {
+    console.log(`Error creating new user :- ${error.message}`);
+    return { message: `Unable to create new user`, status: `UserCreationFail` };
+  }
+}
 
-const setPassword = async (req, res) => {
+//----------------------------- login --------------------------------
+const login = async (email, password) => {
+  const userId = await checkUserInIndex(email);
+  // check if user exists
+  if (userId === false || userId === "NoUser") {
+    return { message: `Unable to find user with email ${email}.`, status: `UserLoginFail` };
+  }
+
+  // get user data
+  const userRef = firestoreDB.collection(usersCollectionName).doc(userId);
+  let userDoc;
   try {
-    const { email, password } = req.body;
-
-    const userRef = firestoreDB.collection("users");
-    const query = userRef.where("email", "==", email);
-    const result = await query.get();
-
-    if (result.empty) {
-      return res.status(404).json({ message: "User not found" });
+    userDoc = await userRef.get();
+    if (!userDoc.exists) {
+      return { message: `Unable to fetch user data.`, status: `UserLoginFail` };
     }
+  } catch (error) {
+    console.log(`Error fetching user data :- ${error.message}`);
+    return { message: `Unable to fetch user data.`, status: `UserLoginFail` };
+  }
 
-    const hashedPass = await hash(password, 10);
-    result.forEach(async (doc) => {
-      await doc.ref.set({ password: hashedPass }, { merge: true });
+  // check if password matches
+  try {
+    const savedPassword = userDoc.data().password;
+    const passwordsMatch = await bcrypt.compare(password, savedPassword);
+    if (!passwordsMatch) {
+      return { message: "Wrong password.", status: "UserLoginFail" }
+    }
+  } catch (error) {
+    console.log(`Error checking password :- ${error.message}`);
+  }
+  return { userId: userDoc.id, message: `User login successful`, status: "UserLoginSuccess" };
+}
+
+//------------------------- hash password ------------------------
+const hashPassword = async (password) => {
+  try {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    return hashedPassword;
+  } catch (error) {
+    console.log(`Error hashing password :- ${error.message}`);
+    return false;
+  }
+}
+
+//------------------- add user to usersIndex ----------------------
+const addToUserIndex = async (email, userId) => {
+  const usersIndexRef = firestoreDB.collection(usersCollectionName).doc(usersIndexDocName);
+  // create users index if it doesn't exist
+  const usersIndexCreated = createUsersIndex();
+  if (!usersIndexCreated) return false;
+
+  // add new user to users index
+  try {
+    // replace . with - since . is seen as field separator
+    const modifiedEmail = email.replace(/\./g, '-');
+    await usersIndexRef.update({
+      [modifiedEmail]: userId
     });
-
-    return res.status(201).json({ message: "Password set" });
+    console.log("User added to users index");
+    return true;
   } catch (error) {
-    console.log(error);
+    console.log(`Error adding user to users index :- ${error.message}`);
+    return false;
   }
-};
+}
 
-const loginUser = async (req, res) => {
+//----------------------- check user existence -----------------------
+const checkUserInIndex = async (email) => {
+  const usersIndexRef = firestoreDB.collection(usersCollectionName).doc(usersIndexDocName);
   try {
-    const { email, pass } = req.body;
-
-    const userRef = firestoreDB.collection("users");
-    const query = userRef.where("email", "==", email);
-    const result = await query.get();
-
-    if (result.empty) {
-      throw new Error("User not found");
+    const usersIndex = await usersIndexRef.get();
+    if (!usersIndex.exists) {
+      const usersIndexCreated = createUsersIndex();
+      if (!usersIndexCreated) return false;
+      return "NoUser";
     }
+    const usersIndexData = usersIndex.data();
 
-    result.forEach(async (doc) => {
-      const { password } = doc.data();
-      const passMatch = await compare(pass, password);
-      if (passMatch) {
-        return res.status(201).json(doc.data());
-      } else {
-        return res.status(400).json({ message: "Incorrect Password" });
-      }
-    });
+    const modifiedEmail = email.replace(/\./g, '-');
+    if (usersIndexData.hasOwnProperty([modifiedEmail])) {
+      return usersIndexData[modifiedEmail];
+    }
+    else return "NoUser";
   } catch (error) {
-    console.log(error);
+    console.log(`Error adding user to users index :- ${error.message}`);
+    return false;
   }
-};
+}
 
-module.exports = { loginUser, verifyEmailandSendOTP, verifyOTP, setPassword };
+//------------- create users index ------------------------
+const createUsersIndex = async () => {
+  const usersIndexRef = firestoreDB.collection(usersCollectionName).doc(usersIndexDocName);
+  try {
+    const usersIndex = await usersIndexRef.get()
+    if (!usersIndex.exists) {
+      await usersIndexRef.set({});
+      console.log(`Created users index`);
+      return true;
+    }
+  } catch (error) {
+    console.log(`Error creating users index :- ${error.message}`);
+    return false;
+  }
+}
+
+module.exports = { createUser, login };

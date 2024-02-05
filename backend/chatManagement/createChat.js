@@ -1,6 +1,6 @@
 const
 	{ firestoreDB } = require("../firebaseConfig"),
-	{ chatCollectionName, userCollectionName } = require("../variableNames"),
+	{ chatsCollectionName, usersCollectionName } = require("../variableNames"),
 	admin = require("firebase-admin");
 
 const createChat = async (user1Id, user2Id) => {
@@ -23,10 +23,9 @@ const createChat = async (user1Id, user2Id) => {
 	let chatId = "";
 	//create new chat and add the user1 and user2 as members
 	try {
-		const chatCollectionRef = firestoreDB.collection(chatCollectionName);
+		const chatCollectionRef = firestoreDB.collection(chatsCollectionName);
 		const chatDoc = await chatCollectionRef.add({
-			users: { user1Id, user2Id },
-			messages: []
+			users: [user1Id, user2Id]
 		});
 		chatId = chatDoc.id;
 	} catch (error) {
@@ -49,7 +48,7 @@ const createChat = async (user1Id, user2Id) => {
 
 //checks if user exists in the "users" collection
 const checkUser = async (userId) => {
-	const userRef = firestoreDB.collection(userCollectionName).doc(userId);
+	const userRef = firestoreDB.collection(usersCollectionName).doc(userId);
 	const userDoc = await userRef.get();
 	if (userDoc.exists) return true;
 	else return false;
@@ -57,7 +56,7 @@ const checkUser = async (userId) => {
 
 //adds new chat to user's chats array
 const addChatToUser = async (chatId, userId) => {
-	const userRef = firestoreDB.collection(userCollectionName).doc(userId);
+	const userRef = firestoreDB.collection(usersCollectionName).doc(userId);
 	try {
 		await userRef.update({
 			chats: admin.firestore.FieldValue.arrayUnion(chatId)
