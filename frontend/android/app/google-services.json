@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1068729032317",
+    "project_id": "acamedia-1c5f7",
+    "storage_bucket": "acamedia-1c5f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068729032317:android:c7f31bdb5dc82ac57c5b14",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKfhlB_sf52aBWrMVB_5P-2ETb6jNqCw8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

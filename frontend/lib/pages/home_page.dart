@@ -1,80 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/call_page.dart';
+import 'package:frontend/pages/profile_page.dart';
 import 'package:frontend/pages/search_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+class HomePageState extends State<HomePage> {
   final List<Chat> sampleChats = [
     const Chat(
-        name: 'John Doe',
-        imageUrl: 'https://example.com/profile1.jpg',
-        recentMessage: 'Hey, how are you?',
-        hasUnseenMessages: true),
+      name: 'John Doe',
+      imageUrl: 'lib/assets/p1.jpg',
+      recentMessage: 'Hey, how are you?',
+      hasUnseenMessages: true,
+    ),
     const Chat(
-        name: 'Jane Smith',
-        imageUrl: 'https://example.com/profile2.jpg',
-        recentMessage: 'Check out this video!',
-        hasUnseenMessages: false),
+      name: 'Jane Smith',
+      imageUrl: 'lib/assets/p1.jpg',
+      recentMessage: 'Check out this video!',
+      hasUnseenMessages: false,
+    ),
     const Chat(
-        name: 'Jane Smith',
-        imageUrl: 'https://example.com/profile2.jpg',
-        recentMessage: 'Check out this video!',
-        hasUnseenMessages: false),
+      name: 'Alex Johnson',
+      imageUrl: 'lib/assets/p1.jpg',
+      recentMessage: 'Meeting at 2 PM',
+      hasUnseenMessages: true,
+    ),
     const Chat(
-        name: 'Jane Smith',
-        imageUrl: 'https://example.com/profile2.jpg',
-        recentMessage: 'Check out this video!',
-        hasUnseenMessages: false),
+      name: 'Emily Brown',
+      imageUrl: 'lib/assets/p1.jpg',
+      recentMessage: 'Can you call me?',
+      hasUnseenMessages: false,
+    ),
     const Chat(
-        name: 'Jane Smith',
-        imageUrl: 'https://example.com/profile2.jpg',
-        recentMessage: 'Check out this video!',
-        hasUnseenMessages: false),
+      name: 'Michael Wilson',
+      imageUrl: 'lib/assets/p1.jpg',
+      recentMessage: "🎉 Let's celebrate!",
+      hasUnseenMessages: true,
+    ),
     const Chat(
-        name: 'Jane Smith',
-        imageUrl: 'https://example.com/profile2.jpg',
-        recentMessage: 'Check out this video!',
-        hasUnseenMessages: false),
+      name: 'Sophia Miller',
+      imageUrl: 'lib/assets/p1.jpg',
+      recentMessage: "Don't forget the deadline!",
+      hasUnseenMessages: false,
+    ),
     const Chat(
-        name: 'Jane Smith',
-        imageUrl: 'https://example.com/profile2.jpg',
-        recentMessage: 'Check out this video!',
-        hasUnseenMessages: false),
+      name: 'Daniel Davis',
+      imageUrl: 'lib/assets/p1.jpg',
+      recentMessage: 'Just got back from vacation!',
+      hasUnseenMessages: true,
+    ),
     const Chat(
-        name: 'Jane Smith',
-        imageUrl: 'https://example.com/profile2.jpg',
-        recentMessage: 'Check out this video!',
-        hasUnseenMessages: false),
+      name: 'Olivia White',
+      imageUrl: 'lib/assets/p1.jpg',
+      recentMessage: 'Sending you the files now.',
+      hasUnseenMessages: false,
+    ),
     const Chat(
-        name: 'Jane Smith',
-        imageUrl: 'https://example.com/profile2.jpg',
-        recentMessage: 'Check out this video!',
-        hasUnseenMessages: false),
-    // const Chat(
-    //     name: 'Jane Smith',
-    //     imageUrl: 'https://example.com/profile2.jpg',
-    //     recentMessage: 'Check out this video!',
-    //     hasUnseenMessages: false),
-    // const Chat(
-    //     name: 'Jane Smith',
-    //     imageUrl: 'https://example.com/profile2.jpg',
-    //     recentMessage: 'Check out this video!',
-    //     hasUnseenMessages: false),
-    // const Chat(
-    //     name: 'Jane Smith',
-    //     imageUrl: 'https://example.com/profile2.jpg',
-    //     recentMessage: 'Check out this video!',
-    //     hasUnseenMessages: false),
+      name: 'Liam Moore',
+      imageUrl: 'lib/assets/p1.jpg',
+      recentMessage: 'Happy birthday!',
+      hasUnseenMessages: true,
+    ),
+    const Chat(
+      name: 'Ava Taylor',
+      imageUrl: 'lib/assets/p1.jpg',
+      recentMessage: "Let's grab lunch tomorrow.",
+      hasUnseenMessages: false,
+    ),
   ];
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -89,22 +90,20 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-        actions: [
-          IconButton(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0),
+          child: IconButton(
             onPressed: () {
-              _scaffoldKey.currentState?.openEndDrawer();
+              _scaffoldKey.currentState?.openDrawer();
             },
-            icon: const Padding(
-              padding: EdgeInsets.only(right: 20),
-              child: Icon(Icons.menu),
-            ),
+            icon: const Icon(Icons.menu),
           ),
-        ],
+        ),
       ),
-      endDrawer: Padding(
+      drawer: Padding(
         padding: const EdgeInsets.only(top: 52.0),
         child: Drawer(
-          width: 65.0,
+          width: 210.0,
           child: Container(
             color: const Color.fromRGBO(229, 245, 228, 1),
             child: ListView(
@@ -112,60 +111,104 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.zero,
               children: [
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            'https://example.com/profile_image.jpg'),
-                        radius: 25.0,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 13.0, bottom: 11),
+                      child: ListTile(
+                        title: const Text("Name Name"),
+                        leading: GestureDetector(
+                          onTap: () {
+                            // Handle profile icon tap, navigate to profile page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ProfilePage()),
+                            );
+                          },
+                          child: const SizedBox(
+                            width: 60.0, // Adjust the width as needed
+                            child: CircleAvatar(
+                              foregroundImage: AssetImage('lib/assets/p1.jpg'),
+                              radius: 30.0,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     ListTile(
-                      contentPadding: const EdgeInsets.only(
-                        left: 21.0,
-                        top: 10.0,
-                      ),
-                      leading: const Icon(
-                        Icons.search_rounded,
-                        color: Colors.black,
-                        size: 27.0,
+                      title: const Row(
+                        children: [
+                          Icon(
+                            Icons.search_rounded,
+                            color: Colors.black,
+                            size: 24.0,
+                          ),
+                          SizedBox(width: 15.0),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 2.0),
+                            child: Text("Search"),
+                          ),
+                        ],
                       ),
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SearchPage()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SearchPage(),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
-                      contentPadding: const EdgeInsets.only(
-                        left: 22.0,
-                        top: 10.0,
-                      ),
-                      leading: const Icon(
-                        Icons.call,
-                        color: Colors.black,
+                      title: const Row(
+                        children: [
+                          Icon(
+                            Icons.call_rounded,
+                            color: Colors.black,
+                            size: 24.0,
+                          ),
+                          SizedBox(width: 15.0),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 2.0),
+                            child: Text("Calls"),
+                          ),
+                        ],
                       ),
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CallPage()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CallPage(),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
-                      contentPadding: const EdgeInsets.only(
-                        left: 22.0,
-                        top: 10.0,
+                      title: const Row(
+                        children: [
+                          Icon(
+                            Icons.settings_rounded,
+                            color: Colors.black,
+                            size: 24.0,
+                          ),
+                          SizedBox(width: 15.0),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 2.0),
+                            child: Text("Settings"),
+                          ),
+                        ],
                       ),
-                      leading: const Icon(
-                        Icons.settings,
-                        color: Colors.black,
-                      ),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SearchPage(),
+                          ),
+                        );
+                      },
                     ),
-                    // Add more ListTile items as needed
                   ],
                 ),
               ],
@@ -191,23 +234,23 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Chat {
-  final String name;
-  final String imageUrl;
-  final String recentMessage;
-  final bool hasUnseenMessages;
-
   const Chat({
     required this.name,
     required this.imageUrl,
     required this.recentMessage,
     this.hasUnseenMessages = false,
   });
+
+  final bool hasUnseenMessages;
+  final String imageUrl;
+  final String name;
+  final String recentMessage;
 }
 
 class ChatTile extends StatelessWidget {
-  final Chat chat;
+  const ChatTile({super.key, required this.chat});
 
-  const ChatTile({Key? key, required this.chat}) : super(key: key);
+  final Chat chat;
 
   @override
   Widget build(BuildContext context) {
@@ -215,10 +258,10 @@ class ChatTile extends StatelessWidget {
       child: ListTile(
         tileColor: const Color.fromARGB(255, 248, 248, 248),
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(chat.imageUrl),
-          backgroundColor: const Color.fromRGBO(228, 245, 245, 1),
+          backgroundImage: AssetImage(chat.imageUrl),
+          // backgroundColor: const Color.fromRGBO(228, 245, 245, 1),
           // backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-          radius: 30.0,
+          radius: 25.0,
         ),
         title: Text(chat.name),
         subtitle: Text(chat.recentMessage),

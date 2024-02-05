@@ -1,9 +1,11 @@
-const express = require("express");
-const cors = require("cors");
-const { Server } = require("socket.io");
+const express = require("express"),
+	cors = require("cors"),
+	{ Server } = require("socket.io");
 require("dotenv").config()
 
-const UserRouter = require("./routers/userRouter");
+const 
+	UserRouter = require("./routers/userRouter");
+	initiateServer = require("./chatManagement/main");
 
 const app = express();
 app.use(cors({
@@ -19,3 +21,4 @@ const PORT = process.env.PORT || 8000;
 const server = app.listen(PORT, () => console.log(`Server is connected to port ${PORT}`));
 
 const io = new Server(server);
+initiateServer(io);
