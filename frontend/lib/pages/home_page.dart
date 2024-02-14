@@ -5,7 +5,10 @@ import '../widgets/home_widgets/chat_tile.dart';
 import '../widgets/home_widgets/sample_userdata.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String username;
+  const HomePage({Key? key, required this.username}) : super(key: key);
+
+  // get username => null;
 
   @override
   // ignore: library_private_types_in_public_api

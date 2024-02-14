@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/util/colors.dart';
 import '../widgets/message_widgets/message_list.dart';
 import '../widgets/message_widgets/message_widget.dart';
 import '../widgets/message_widgets/text_input_field.dart';
@@ -11,7 +12,7 @@ class ChatPage extends StatelessWidget {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: Container(
-        color: const Color.fromRGBO(248, 248, 248, 1),
+        color: AppColors.lightWhite,
         child: const Column(
           children: [
             Expanded(
@@ -48,6 +49,11 @@ class ChatPage extends StatelessWidget {
                     message: 'Hello my name is name',
                     timestamp: 'timestamp',
                   ),
+                  MessageWidget(
+                    sender: 'Sender1',
+                    message: 'Hello my name is name',
+                    timestamp: 'timestamp',
+                  ),
                 ],
               ),
             ),
@@ -69,9 +75,24 @@ class ChatPage extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      title: const Text(
-        "message",
-        style: TextStyle(color: Colors.black),
+      title: Padding(
+        padding: EdgeInsets.zero,
+        child: Container(
+          alignment: Alignment.centerLeft,
+          child: const Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: AssetImage('lib/assets/p1.jpg'),
+                radius: 25.0,
+              ),
+              SizedBox(width: 12.0),
+              Text(
+                "message",
+                style: TextStyle(color: Colors.black, fontSize: 20.0),
+              ),
+            ],
+          ),
+        ),
       ),
       backgroundColor: Colors.white,
       elevation: 0,

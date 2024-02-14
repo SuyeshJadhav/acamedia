@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/home_page.dart';
-// import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/login_page.dart';
 
 void main() async {
@@ -15,6 +14,10 @@ class MainApp extends StatelessWidget {
     var islogin = true;
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: islogin ? LoginPage() : HomePage());
+        home: islogin
+            ? LoginPage()
+            : HomePage(
+                username: '',
+              ));
   }
 }
