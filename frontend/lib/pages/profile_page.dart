@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import '../widgets/profile_widgets/logout_btn.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -51,11 +52,19 @@ class ProfilePageState extends State<ProfilePage> {
                   "NAME NAME",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
                 ),
+                const Text(
+                  "NAME NAME",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                ),
+                const Text(
+                  "NAME NAME",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                ),
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
-                    padding: EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -89,14 +98,12 @@ class ProfilePageState extends State<ProfilePage> {
                                 Icons.notifications_active,
                                 Icons.notifications_off
                               ],
-                              iconSize: 50.0,
+                              iconSize: 24.0,
                               radiusStyle: true,
                               onToggle: (index) {
                                 setState(() {
                                   notificationsEnabled = index == 0;
                                 });
-                                print(
-                                    'Notifications switched to: $notificationsEnabled');
                               },
                             ),
                           ],
@@ -105,48 +112,8 @@ class ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 20.0),
-                //   child: Text(
-                //     "Notifications",
-                //     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                //   ),
-                // ),
                 const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(195, 255, 0, 0),
-                      fixedSize: const Size(350, 55),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(
-                          Icons.logout_rounded,
-                          size: 25,
-                          color: Color.fromRGBO(247, 247, 247, 1),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Logout",
-                          style: TextStyle(
-                              color: Color.fromRGBO(247, 247, 247, 1),
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+                const LogoutBtn()
               ],
             ),
           ),

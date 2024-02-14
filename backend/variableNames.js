@@ -1,5 +1,6 @@
 module.exports = {
-  chatCollectionName: "chats",
-  userCollectionName: "users",
-  messageCollectionName: "messages"
+  chatsCollectionName: "chats",
+  usersCollectionName: "users",
+  messagesCollectionName: "messages",
+  usersIndexDocName: "usersIndex",
 }

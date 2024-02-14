@@ -12,18 +12,21 @@ dependencies:
   riverpod: ^2.4.9
   flutter_riverpod: ^2.4.9
   hooks_riverpod: ^2.4.9
-  url_launcher: ^6.2.3
-  font_awesome_flutter: ^10.6.0
-  google_sign_in: ^6.2.1
-  firebase_core: ^2.24.2
-  firebase_analytics: ^10.8.0
-  firebase_auth: ^4.16.0
-  cloud_firestore: ^4.14.0
-  firebase_storage: ^11.6.0
-  image_picker: ^1.0.7
+  # url_launcher: ^6.2.3
+  # font_awesome_flutter: ^10.6.0
+  # google_sign_in: ^6.2.1
+  # firebase_core: ^2.24.2
+  # firebase_analytics: ^10.8.0
+  # firebase_auth: ^4.16.0
+  # cloud_firestore: ^4.14.0
+  # firebase_storage: ^11.6.0
+  # image_picker: ^1.0.7
   http: ^1.2.0
   crypto: ^3.0.3
   toggle_switch: ^2.1.0
+  google_fonts: ^6.1.0
+  socket_io_client: ^2.0.3+1
+  path_provider: ^2.1.2
 
 dev_dependencies:
   flutter_test:

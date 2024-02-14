@@ -1,5 +1,5 @@
 const { firestoreDB } = require("../firebaseConfig"),
-  { chatCollectionName, userCollectionName } = require("../variableNames"),
+  { chatsCollectionName, usersCollectionName } = require("../variableNames"),
   admin = require("firebase-admin");
 
 const createChat = async (user1Id, user2Id) => {
@@ -74,6 +74,11 @@ const checkUser = async (userId) => {
   if (userDoc.exists) return true;
   else return false;
 };
+	const userRef = firestoreDB.collection(usersCollectionName).doc(userId);
+	const userDoc = await userRef.get();
+	if (userDoc.exists) return true;
+	else return false;
+}
 
 //adds new chat to user's chats array
 const addChatToUser = async (chatId, userId) => {
@@ -88,5 +93,16 @@ const addChatToUser = async (chatId, userId) => {
   }
   return true;
 };
+	const userRef = firestoreDB.collection(usersCollectionName).doc(userId);
+	try {
+		await userRef.update({
+			chats: admin.firestore.FieldValue.arrayUnion(chatId)
+		});
+	} catch (error) {
+		console.error(`Error adding chatId to user ${userId} :- ${error.message}`);
+		return false;
+	}
+	return true;
+}
 
 module.exports = createChat;
