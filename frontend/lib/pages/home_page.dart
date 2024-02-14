@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/call_page.dart';
 import 'package:frontend/pages/profile_page.dart';
 import 'package:frontend/pages/search_page.dart';
+// import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String username;
+  const HomePage({Key? key, required this.username}) : super(key: key);
+
+  // get username => null;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -12,6 +16,24 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  // late IO.Socket _socket;
+
+  // _connectSocket() {
+  //   _socket.onConnect((data) => print("Socket connection successful."));
+  //   _socket.onConnectError((data) => print("Socket connection Error: $data."));
+  //   _socket.onDisconnect((data) => print("Socket disconnected."));
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    // _socket = IO.io(
+    //     "http://localhost:3000",
+    //     IO.OptionBuilder().setTransports(['websocket']).setQuery(
+    //         {'username: ': widget.username}).build());
+    // _connectSocket();
+  }
+
   final List<Chat> sampleChats = [
     const Chat(
       name: 'John Doe',
@@ -117,7 +139,7 @@ class HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 13.0, bottom: 11),
                       child: ListTile(
-                        title: const Text("Name Name"),
+                        title: Text(widget.username),
                         leading: GestureDetector(
                           onTap: () {
                             // Handle profile icon tap, navigate to profile page
@@ -127,11 +149,17 @@ class HomePageState extends State<HomePage> {
                                   builder: (context) => const ProfilePage()),
                             );
                           },
-                          child: const SizedBox(
+                          child: SizedBox(
                             width: 60.0, // Adjust the width as needed
                             child: CircleAvatar(
-                              foregroundImage: AssetImage('lib/assets/p1.jpg'),
+                              backgroundColor:
+                                  Color.fromARGB(229, 228, 245, 245),
+                              foregroundColor:
+                                  const Color.fromARGB(255, 0, 0, 0),
                               radius: 30.0,
+                              child: Text(widget.username[0] +
+                                  widget.username[
+                                      widget.username.indexOf(" ") + 1]),
                             ),
                           ),
                         ),
@@ -258,10 +286,11 @@ class ChatTile extends StatelessWidget {
       child: ListTile(
         tileColor: const Color.fromARGB(255, 248, 248, 248),
         leading: CircleAvatar(
-          backgroundImage: AssetImage(chat.imageUrl),
-          // backgroundColor: const Color.fromRGBO(228, 245, 245, 1),
-          // backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+          // backgroundImage: AssetImage(chat.imageUrl),
+          backgroundColor: const Color.fromRGBO(228, 245, 245, 1),
+          foregroundColor: const Color.fromARGB(255, 0, 0, 0),
           radius: 25.0,
+          child: Text(chat.name[0] + chat.name[chat.name.indexOf(" ") + 1]),
         ),
         title: Text(chat.name),
         subtitle: Text(chat.recentMessage),

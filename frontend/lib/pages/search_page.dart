@@ -85,8 +85,9 @@ class SearchResultsList extends StatelessWidget {
   final String query;
 
   List<ChatItem> names = [
-    ChatItem(name: "John", tags: ["Math", "Physics", "Engineering"]),
-    ChatItem(name: "Alice", tags: ["Physics", "Chemistry", "Medical"]),
+    ChatItem(name: "John Doe", tags: ["Math", "Physics", "Engineering"]),
+    ChatItem(
+        name: "Alice Wonderland", tags: ["Physics", "Chemistry", "Medical"]),
   ];
 
   SearchResultsList({super.key, required this.query});
@@ -104,11 +105,21 @@ class SearchResultsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final results = getSearchResults(query);
 
-    return ListView.builder(
-      itemCount: results.length,
-      itemBuilder: (context, index) {
-        return ListTile(title: Text(results[index].name));
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: ListView.builder(
+        itemCount: results.length,
+        itemBuilder: (context, index) {
+          final initial = results[index];
+          return ListTile(
+              leading: CircleAvatar(
+                  backgroundColor: const Color.fromARGB(229, 228, 245, 245),
+                  foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                  child: Text(initial.name[0] +
+                      initial.name[initial.name.indexOf(" ") + 1])),
+              title: Text(results[index].name));
+        },
+      ),
     );
   }
 }

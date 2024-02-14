@@ -9,6 +9,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var username = "Vedant";
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -54,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
+                            username = value!;
                             return 'Enter your username';
                           }
                           return null;
@@ -94,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomePage(),
+                          builder: (context) => HomePage(username: username),
                         ),
                       );
                     },

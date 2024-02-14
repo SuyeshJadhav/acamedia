@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/login_page.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -55,7 +56,7 @@ class ProfilePageState extends State<ProfilePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
-                    padding: EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -116,7 +117,12 @@ class ProfilePageState extends State<ProfilePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()));
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromARGB(195, 255, 0, 0),
                       fixedSize: const Size(350, 55),
