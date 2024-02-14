@@ -1,24 +1,36 @@
 const express = require("express"),
-	cors = require("cors"),
-	{ Server } = require("socket.io");
-require("dotenv").config()
+  cors = require("cors"),
+  { Server } = require("socket.io"),
+  { createServer } = require("http");
+require("dotenv").config();
 
-const 
-	UserRouter = require("./routers/userRouter");
-	initiateServer = require("./chatManagement/main");
+const UserRouter = require("./routers/userRouter");
+const socketRouter = require("./routers/socketRoutes");
+initiateServer = require("./chatManagement/main");
 
 const app = express();
-app.use(cors({
-	origin: "*"
-}));
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/user", UserRouter);
+app.use("/api/socket", socketRouter);
 
 const PORT = process.env.PORT || 8000;
-const server = app.listen(PORT, () => console.log(`Server is connected to port ${PORT}`));
+// const server = app.listen(PORT, () => console.log(`Server is connected to port ${PORT}`));
 
-const io = new Server(server);
+const httpServer = createServer(app);
+
+// const io = new Server(server);
+const io = new Server(httpServer);
+
+httpServer.listen(PORT, () => {
+  console.log(`Server is connected to port ${PORT}`);
+});
+
 initiateServer(io);

@@ -20,9 +20,8 @@ router.post("/verifyEmail", verifyEmailandSendOTP);
 router.post("/verifyOTP", verifyOTP);
 router.post("/setPassword", setPassword);
 
-
-router.post("/chat", async (req,res) => {
-  const {user1Id, user2Id} = req.body;
+router.post("/chat", async (req, res) => {
+  const { user1Id, user2Id } = req.body;
   const result = await createChat(user1Id, user2Id);
   res.send(result);
 });
