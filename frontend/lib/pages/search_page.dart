@@ -34,7 +34,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
         title: const Text(
           "Search Page",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontSize: 20.0),
         ),
         backgroundColor: Colors.white,
         elevation: 0,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/util/colors.dart';
 import 'package:frontend/widgets/home_widgets/drawer_list.dart';
 
 class HomeDrawer extends StatelessWidget {
@@ -12,7 +13,7 @@ class HomeDrawer extends StatelessWidget {
         borderRadius: BorderRadius.circular(0), // Adjust the radius as needed
       ),
       child: Container(
-        color: const Color.fromRGBO(229, 245, 228, 1),
+        color: AppColors.lightGreen,
         child: ListView(
           shrinkWrap: true,
           padding: EdgeInsets.zero,

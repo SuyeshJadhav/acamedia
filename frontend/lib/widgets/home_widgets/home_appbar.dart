@@ -11,7 +11,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       title: const Text(
         'Chats',
-        style: TextStyle(color: Colors.black),
+        style: TextStyle(color: Colors.black, fontSize: 20.0),
       ),
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       leading: Padding(

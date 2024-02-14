@@ -18,7 +18,7 @@ class ForgotPass extends StatelessWidget {
         ),
         title: const Text(
           "forgot password",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontSize: 20.0),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
