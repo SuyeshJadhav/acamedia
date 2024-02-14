@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/home_page.dart';
-// import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/login_page.dart';
 
 void main() async {
