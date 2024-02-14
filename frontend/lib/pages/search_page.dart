@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../widgets/search_widgets/search_bar.dart';
+import '../widgets/search_widgets/search_results_list.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -41,84 +43,12 @@ class _SearchPageState extends State<SearchPage> {
         color: const Color.fromARGB(255, 248, 248, 248),
         child: Column(
           children: [
-            SearchBar(onChangedQuery: onChangedQuery),
+            SearchBox(onChangedQuery: onChangedQuery),
             Expanded(
               child: SearchResultsList(query: query),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class SearchBar extends StatelessWidget {
-  final ValueChanged<String> onChangedQuery;
-
-  const SearchBar({super.key, required this.onChangedQuery});
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-        child: Center(
-          child: SizedBox(
-            width: 350,
-            child: TextField(
-              onChanged: onChangedQuery,
-              decoration: const InputDecoration(
-                labelText: "Search",
-                border: OutlineInputBorder(),
-                suffixIcon: Icon(Icons.search),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ignore: must_be_immutable
-class SearchResultsList extends StatelessWidget {
-  final String query;
-
-  List<ChatItem> names = [
-    ChatItem(name: "John Doe", tags: ["Math", "Physics", "Engineering"]),
-    ChatItem(
-        name: "Alice Wonderland", tags: ["Physics", "Chemistry", "Medical"]),
-  ];
-
-  SearchResultsList({super.key, required this.query});
-
-  // Basic search logic
-  List<ChatItem> getSearchResults(String query) {
-    query = query.toLowerCase();
-    return names.where((item) {
-      return item.name.toLowerCase().contains(query) ||
-          item.tags.any((tag) => tag.toLowerCase().contains(query));
-    }).toList();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final results = getSearchResults(query);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: ListView.builder(
-        itemCount: results.length,
-        itemBuilder: (context, index) {
-          final initial = results[index];
-          return ListTile(
-              leading: CircleAvatar(
-                  backgroundColor: const Color.fromARGB(229, 228, 245, 245),
-                  foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-                  child: Text(initial.name[0] +
-                      initial.name[initial.name.indexOf(" ") + 1])),
-              title: Text(results[index].name));
-        },
       ),
     );
   }
