@@ -7,15 +7,15 @@ const router = Router();
 //   await loginUser();
 // });
 
-router.post("/login", loginUser);
-router.post("/verifyEmail", verifyEmailandSendOTP);
-router.post("/verifyOTP", verifyOTP);
-router.post("/setPassword", setPassword);
+// router.post("/login", login);
+// router.post("/verifyEmail", verifyEmailandSendOTP);
+// router.post("/verifyOTP", verifyOTP);
+// router.post("/setPassword", setPassword);
 
-router.post("/chat", async (req, res) => {
-  const { user1Id, user2Id } = req.body;
-  const result = await createChat(user1Id, user2Id);
-});
+// router.post("/chat", async (req, res) => {
+//   const { user1Id, user2Id } = req.body;
+//   const result = await createChat(user1Id, user2Id);
+// });
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const result = await login(email, password);

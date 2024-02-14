@@ -1,13 +1,20 @@
 const admin = require("firebase-admin");
 const { firestoreDB } = require("../firebaseConfig");
-const { chatsCollectionName, messagesCollectionName, usersCollectionName } = require("../variableNames");
+const {
+  chatsCollectionName,
+  messagesCollectionName,
+  usersCollectionName,
+} = require("../variableNames");
 const { getTimeStamp } = require("../helperFunctions");
 
 //---------------------- store message --------------------------------
 const storeMessage = async (senderId, chatId, message) => {
   const correctUser = checkUser(senderId, chatId);
   if (!correctUser) {
-    return { message: `User ${senderId} doesn't relate with chat ${chatId}.`, status: "MessageSendingFail" };
+    return {
+      message: `User ${senderId} doesn't relate with chat ${chatId}.`,
+      status: "MessageSendingFail",
+    };
   }
 
   const chatRef = firestoreDB.collection(chatsCollectionName).doc(chatId);
@@ -16,11 +23,11 @@ const storeMessage = async (senderId, chatId, message) => {
   // store message in database with timestamp
   try {
     const timeStamp = getTimeStamp();
-    console.log(timeStamp);
+    // console.log(timeStamp);
     const messageDoc = await messageCollectionRef.add({
       sender: senderId,
       message,
-      timeStamp
+      timeStamp,
     });
     const messageId = messageDoc.id;
 
@@ -29,14 +36,16 @@ const storeMessage = async (senderId, chatId, message) => {
     console.error(`Error storing message :- ${error.message}`);
     return { message: `Unable to send message.`, status: "MessageSendingFail" };
   }
-}
-
+};
 
 //--------------- delete message given chatId --------------------------
 const deleteMessage = async (userId, chatId, messageId) => {
   const correctUser = checkUser(userId, chatId);
   if (!correctUser) {
-    return { message: `User doesn't relate with chat.`, status: "MessageSendingFail" };
+    return {
+      message: `User doesn't relate with chat.`,
+      status: "MessageSendingFail",
+    };
   }
 
   const chatRef = firestoreDB.collection(chatsCollectionName).doc(chatId);
@@ -48,9 +57,12 @@ const deleteMessage = async (userId, chatId, messageId) => {
     return { status: "MessageDeletionSuccess" };
   } catch (error) {
     console.log(`Error deleting message ${messageId} :- ${error.message}`);
-    return { message: `Unable to delete message.`, status: "MessageDeletionFail" };
+    return {
+      message: `Unable to delete message.`,
+      status: "MessageDeletionFail",
+    };
   }
-}
+};
 
 //------- check if the chatId belongs to the user's chats array ---------
 const checkUser = async (userId, chatId) => {
@@ -67,7 +79,6 @@ const checkUser = async (userId, chatId) => {
     console.error(`Error checking chat in user data :- ${error.message}`);
     return false;
   }
-}
-
+};
 
 module.exports = { storeMessage, deleteMessage };

@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const UserRouter = require("./routers/userRouter");
 const socketRouter = require("./routers/socketRoutes");
+const chatRouter = require("./routers/chatRouter");
 initiateServer = require("./chatManagement/main");
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/user", UserRouter);
+app.use("/api/chat", chatRouter);
 app.use("/api/socket", socketRouter);
 
 const PORT = process.env.PORT || 8000;
