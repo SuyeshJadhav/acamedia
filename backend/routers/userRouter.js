@@ -31,7 +31,7 @@ router.post("/create-user", async (req, res) => {
   res.send(result);
 });
 
-router.post("/get-user", async(req,res) => {
+router.get("/get-user", async(req,res) => {
   const {email, userId} = req.body;
   const result = await getUserData(email, userId);
   res.send(result);

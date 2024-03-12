@@ -19,7 +19,7 @@ const getUserId = async (email) => {
   const usersCollectionRef = firestoreDB.collection(usersCollectionName);
   const query = usersCollectionRef.where("email", "==", email.toLowerCase());
   const userDocList = await query.get();
-  return userDoc.id;
+  return userDocList[0].id;
 }
 
 //------------------- add user to usersIndex ----------------------
