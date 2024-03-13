@@ -1,4 +1,4 @@
-import 'package:frontend/pages/home_page.dart';
+import '../chat.dart';
 
 final List<Chat> sampleChats = [
   const Chat(

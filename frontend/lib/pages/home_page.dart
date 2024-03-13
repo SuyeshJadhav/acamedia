@@ -6,7 +6,7 @@ import '../widgets/home_widgets/sample_userdata.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
-  const HomePage({Key? key, required this.username}) : super(key: key);
+  const HomePage({super.key, required this.username});
 
   // get username => null;
 
@@ -42,18 +42,4 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-
-class Chat {
-  const Chat({
-    required this.name,
-    required this.imageUrl,
-    required this.recentMessage,
-    this.hasUnseenMessages = false,
-  });
-
-  final bool hasUnseenMessages;
-  final String imageUrl;
-  final String name;
-  final String recentMessage;
 }
