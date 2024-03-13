@@ -5,10 +5,10 @@ import '../widgets/home_widgets/chat_tile.dart';
 import '../widgets/home_widgets/sample_userdata.dart';
 
 class HomePage extends StatefulWidget {
-  final String username;
-  const HomePage({Key? key, required this.username}) : super(key: key);
+  final String userId;
+  const HomePage({Key? key, required this.userId}) : super(key: key);
 
-  // get username => null;
+  // get userId => null;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -19,6 +19,12 @@ class HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
@@ -26,17 +32,10 @@ class HomePageState extends State<HomePage> {
       drawer: const SafeArea(child: HomeDrawer()),
       body: Container(
         color: const Color.fromRGBO(248, 248, 248, 1),
-        child: Column(
+        child: const Column(
           children: [
             // Chat List
-            Expanded(
-              child: ListView.builder(
-                itemCount: sampleChats.length,
-                itemBuilder: (context, index) {
-                  return ChatTile(chat: sampleChats[index]);
-                },
-              ),
-            ),
+            Expanded(child: chats()),
           ],
         ),
       ),

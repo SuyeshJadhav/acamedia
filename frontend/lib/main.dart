@@ -17,7 +17,7 @@ class MainApp extends StatelessWidget {
         home: islogin
             ? LoginPage()
             : HomePage(
-                username: '',
+                userId: '',
               ));
   }
 }
