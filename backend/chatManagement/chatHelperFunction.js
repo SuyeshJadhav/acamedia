@@ -7,8 +7,6 @@ const getChatId = async (user1Id, user2Id) => {
   const chatIdQuery = chatCollectionRef
     .where("users", "array-contains", user1Id, user2Id)
 
-  console.log(user1Id, user2Id);
-
   try {
     const chatDocs = await chatIdQuery.get();
     if (chatDocs.docs.length === 1) {

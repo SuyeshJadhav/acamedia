@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 
 //----------------------------- login --------------------------------
 const login = async (email, password) => {
-  const userId = getUserId(email);
+  const userId = await getUserId(email);
   // const userId = await checkUserInIndex(email);
   // check if user exists
   if (userId === false || userId === "NoUser") {

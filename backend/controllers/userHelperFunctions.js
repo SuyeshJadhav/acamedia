@@ -18,8 +18,13 @@ const hashPassword = async (password) => {
 const getUserId = async (email) => {
   const usersCollectionRef = firestoreDB.collection(usersCollectionName);
   const query = usersCollectionRef.where("email", "==", email.toLowerCase());
-  const userDocList = await query.get();
-  return userDocList[0].id;
+  try{
+    const userDocList = await query.get();
+    return userDocList.docs[0].id;
+  } catch (error) {
+    console.log(`Error checking user using email:- \n${error.message}`);
+    return false;
+  }
 }
 
 //------------------- add user to usersIndex ----------------------
