@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const createChat = require("../chatManagement/createChat");
 const { storeMessage, deleteMessage } = require("../chatManagement/messageManagement");
+const { getChatId } = require( "../chatManagement/chatHelperFunction" );
 
 const router = Router();
 
@@ -20,6 +21,12 @@ router.delete("/delete-message", async (req, res) => {
   const { senderId, chatId, messageId } = req.body;
   const result = await deleteMessage(senderId, chatId, messageId);
   res.send(result);
+});
+
+router.get("/get-chat-id", async (req, res) => {
+  const {user1Id, user2Id} = req.body;
+  const result = await getChatId(user1Id, user2Id);
+  res.send({chatId: result});
 });
 
 module.exports = router;

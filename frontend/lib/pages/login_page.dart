@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/forgot_pass.dart';
 import 'package:frontend/pages/home_page.dart';
+import 'package:http/http.dart' as http;
 
 // Styling constants
 const EdgeInsets _inputFieldPadding = EdgeInsets.symmetric(
@@ -16,7 +19,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var username = "Vedant";
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -99,29 +101,21 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildLoginButton() {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromRGBO(42, 82, 81, 1),
-        fixedSize: const Size(90, 45),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromRGBO(42, 82, 81, 1),
+          fixedSize: const Size(90, 45),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
         ),
-      ),
-      onPressed: () async {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const HomePage(
-                      username: "",
-                    )));
-      },
-      child: const Text(
-        'Login',
-        style: TextStyle(
-          fontSize: 15,
-          color: Colors.white,
-        ),
-      ),
-    );
+        onPressed: _authenticate,
+        child: const Text(
+          'Login',
+          style: TextStyle(
+            fontSize: 15,
+            color: Colors.white,
+          ),
+        ));
   }
 
   Widget _buildForgotPasswordLink() {
@@ -135,9 +129,38 @@ class _LoginPageState extends State<LoginPage> {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const ForgotPass(),
+          builder: (context) => const ForgotPassPage(),
         ),
       ),
     );
+  }
+
+  void _authenticate() async {
+    final String uri, username, password, userId;
+    username = _usernameController.text;
+    password = _passwordController.text;
+
+    uri = 'http://10.0.2.2:8000/api/user/login';
+    final url = Uri.parse(uri);
+    try {
+      final res = await http.post(url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'email': username, 'password': password}));
+
+      final body = jsonDecode(res.body);
+      userId = body['userId'];
+      _pageRoute(userId);
+    } catch (e) {
+      print('Error during auth: $e');
+    }
+  }
+
+  void _pageRoute(String userId) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomePage(
+                  userId: userId,
+                )));
   }
 }
