@@ -57,6 +57,7 @@
   </head>
   <body>
     <ul id="messages"></ul>
+    <ul id="usersUL"></ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
@@ -67,6 +68,7 @@
 
     var form = document.getElementById("form");
     var input = document.getElementById("input");
+    var userUL = document.getElementById("usersUL"); // Corrected id name
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -81,6 +83,51 @@
       item.textContent = msg;
       messages.appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    socket.on("users", (users) => {
+      users.forEach((user) => {
+        user.self = user.userID === socket.id;
+        var item = document.createElement("li");
+        item.id = "user";
+        item.textContent = user.userID;
+        usersUL.appendChild(item);
+      });
+      // put the current user first, and then sort by username
+      this.users = users.sort((a, b) => {
+        if (a.self) return -1;
+        if (b.self) return 1;
+        if (a.username < b.username) return -1;
+        return a.username > b.username ? 1 : 0;
+      });
+    });
+
+    userUL.addEventListener("click", (e) => {
+      // Corrected variable name
+      console.log("clicked");
+      var selectedUser = e.target.textContent; // Corrected event object reference
+      console.log("Selected user:", selectedUser);
+
+      socket.emit("private message", {
+        content: "Private message content", // Replace with your message content
+        to: selectedUser,
+      });
+
+      socket.on("private message", ({ content, from }) => {
+        for (let i = 0; i < this.users.length; i++) {
+          const user = this.users[i];
+          if (user.userID === from) {
+            user.messages.push({
+              content,
+              fromSelf: false,
+            });
+            if (user !== this.selectedUser) {
+              user.hasNewMessages = true;
+            }
+            break;
+          }
+        }
+      });
     });
   </script>
 </html>
