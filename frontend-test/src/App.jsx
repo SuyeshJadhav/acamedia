@@ -20,7 +20,6 @@ const App = () => {
     const sessionID = localStorage.getItem("sessionID");
 
     if (sessionID) {
-      setUsernameAlreadySelected(true);
       socket.auth = { sessionID };
       socket.connect();
     }
@@ -33,7 +32,6 @@ const App = () => {
 
     socket.on("connect_error", (err) => {
       if (err.message === "invalid username") {
-        setUsernameAlreadySelected(false);
       }
     });
 
