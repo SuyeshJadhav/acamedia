@@ -30,7 +30,11 @@ class _chatsState extends State<chats> {
               final email = chat['email'];
               final recentMessage = 'Hey, how are you?';
               return ListTile(
-                leading: CircleAvatar(child: Text(email[0])),
+                leading: CircleAvatar(
+                    child: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Text(email[0]),
+                )),
                 title: Text(email),
                 subtitle: Text(recentMessage),
               );
