@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/call_page.dart';
 import 'package:frontend/pages/profile_page.dart';
 import 'package:frontend/pages/search_page.dart';
+import 'package:frontend/pages/settings_page.dart';
 import 'package:frontend/widgets/home_widgets/drawer_list_title.dart';
 
 class DrawerList extends StatelessWidget {
@@ -71,7 +72,7 @@ class DrawerList extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const SearchPage(),
+                builder: (context) => const SettingsPage(),
               ),
             );
           },

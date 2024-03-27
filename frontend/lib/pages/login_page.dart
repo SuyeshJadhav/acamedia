@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const ForgotPass(),
+          builder: (context) => const ForgotPassPage(),
         ),
       ),
     );
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
     username = _usernameController.text;
     password = _passwordController.text;
 
-    uri = 'http://localhost:8000/api/user/login';
+    uri = 'http://10.0.2.2:8000/api/user/login';
     final url = Uri.parse(uri);
     try {
       final res = await http.post(url,

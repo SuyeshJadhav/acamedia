@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/msg_page.dart';
 import 'package:frontend/util/colors.dart';
+import '../chat.dart';
 
 class ChatTile extends StatelessWidget {
   const ChatTile({super.key, required this.chat});

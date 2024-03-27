@@ -13,6 +13,7 @@ class ChatPage extends StatelessWidget {
       appBar: _buildAppBar(context),
       body: Container(
         color: AppColors.lightWhite,
+        // color: Colors.black,
         child: const Column(
           children: [
             Expanded(

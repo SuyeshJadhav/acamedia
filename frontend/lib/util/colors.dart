@@ -7,4 +7,24 @@ class AppColors {
   static const Color blackGreen = Color.fromRGBO(38, 45, 37, 1);
   static const Color darkWhite = Color.fromRGBO(247, 247, 247, 1);
   static const Color lightWhite = Color.fromRGBO(252, 252, 252, 1);
+  static const Color darkGrey = Color.fromRGBO(40, 40, 40, 1);
+
+  static Color bgColor = Colors.white;
+  static Color recBgColor = Colors.white;
+  static Color textColor = Colors.white;
+  static Color drawerColor = Colors.white;
+
+  AppColors(bool isDarkMode) {
+    if (isDarkMode) {
+      bgColor = Colors.black;
+      recBgColor = darkGrey;
+      textColor = Colors.white;
+      drawerColor = darkGreen;
+    } else {
+      bgColor = Colors.white;
+      recBgColor = lightWhite;
+      textColor = Colors.black;
+      drawerColor = lightGreen;
+    }
+  }
 }
