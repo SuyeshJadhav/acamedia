@@ -6,10 +6,9 @@ import 'package:frontend/pages/settings_page.dart';
 import 'package:frontend/widgets/home_widgets/drawer_list_title.dart';
 
 class DrawerList extends StatelessWidget {
-  final String fname, lname;
+  final String name;
   const DrawerList(
-    this.fname,
-    this.lname, {
+    this.name, {
     super.key,
   });
 
@@ -22,7 +21,7 @@ class DrawerList extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 13.0, bottom: 11),
           child: ListTile(
-            title: Text('$fname $lname'),
+            title: Text(name),
             leading: GestureDetector(
               onTap: () {
                 // Handle profile icon tap, navigate to profile page

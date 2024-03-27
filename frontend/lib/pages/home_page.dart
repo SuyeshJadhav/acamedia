@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:frontend/services/user_service.dart';
 import 'package:frontend/widgets/home_widgets/home_appbar.dart';
 import 'package:frontend/widgets/home_widgets/home_drawer.dart';
 // import '../widgets/home_widgets/chat_tile.dart';
-import 'package:http/http.dart' as http;
 import '../widgets/home_widgets/sample_userdata.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String fname = '', lname = '';
+  String name = '';
 
   @override
   initState() {
@@ -29,12 +27,25 @@ class HomePageState extends State<HomePage> {
     fetchUserData(widget.userId);
   }
 
+  fetchUserData(userId) async {
+    await userService.fetchUserData(userId).then((value) => {
+          if (value != null)
+            {
+              setState(() {
+                name = value;
+              })
+            }
+          else
+            {name = "NAME NAME"}
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: const HomeAppBar(),
-      drawer: SafeArea(child: HomeDrawer(fname, lname)),
+      drawer: SafeArea(child: HomeDrawer(name)),
       body: Container(
         color: const Color.fromRGBO(248, 248, 248, 1),
         child: const Column(
@@ -45,27 +56,5 @@ class HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
-
-  void fetchUserData(String userId) async {
-    final uri, url;
-    uri = 'http://localhost:8000/api/user/get-user?userId=${userId}';
-    url = Uri.parse(uri);
-
-    try {
-      final res = await http.post(url,
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'userId': userId}));
-      final body = jsonDecode(res.body);
-
-      setState(() {
-        fname = body['fname'];
-        lname = body['lname'];
-      });
-
-      print("User Data Fetched");
-    } catch (e) {
-      print('Error in fetching data: $e');
-    }
   }
 }
