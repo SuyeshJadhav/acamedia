@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class authService {
-  static Future<String> authenticate(TextEditingController usernameController,
+class AuthService {
+  static Future<String?> authenticate(TextEditingController usernameController,
       TextEditingController passwordController) async {
     final String uri, username, password, userId;
     username = usernameController.text;
@@ -21,7 +21,7 @@ class authService {
       return userId;
     } catch (e) {
       print('Error during auth: $e');
-      return '';
+      return null;
     }
   }
 }

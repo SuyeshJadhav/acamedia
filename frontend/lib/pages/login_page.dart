@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/pages/forgot_pass.dart';
 import 'package:frontend/pages/home_page.dart';
+import 'package:frontend/services/user_service.dart';
 import '../services/auth_service.dart';
 
 // Styling constants
@@ -135,9 +137,24 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _authenticate(
-      TextEditingController _username, TextEditingController _password) async {
-    await authService.authenticate(_username, _password).then((value) =>
-        {if (value != null) _pageRoute(value) else print('NO user id found')});
+      TextEditingController username, TextEditingController password) async {
+    String id = '';
+    await AuthService.authenticate(username, password).then((value) => {
+          if (value != null)
+            {
+              _pageRoute(value),
+              HelperFunctions.setLoggedInStatus(true),
+              HelperFunctions.setUserId(value),
+              setState(() {
+                id = value;
+              })
+            }
+          else
+            print('No user id found')
+        });
+    await userService.fetchUserData(id).then((data) async => {
+          if (data != null) {await HelperFunctions.setUserData(data)}
+        });
   }
 
   void _pageRoute(String userId) {
