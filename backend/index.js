@@ -36,6 +36,9 @@ const io = require("socket.io")(httpServer, {
   },
 });
 
+// const ip = "10.0.2.2";
+// const ip = "127.0.0.1";
+// , ip
 httpServer.listen(PORT, () => {
   console.log(`Server is connected to port ${PORT}`);
 });

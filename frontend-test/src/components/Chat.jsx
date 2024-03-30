@@ -11,7 +11,6 @@ const Chat = () => {
     socket.on("users", (users) => {
       users.forEach((user) => {
         user.self = user.userID === socket.id;
-        // Ensure messages is an array
         user.messages = user.messages || [];
       });
       setUsers(
@@ -28,7 +27,6 @@ const Chat = () => {
       setUsers((prev) => {
         const userExists = prev.some((u) => u.userID === user.userID);
         if (!userExists) {
-          // Ensure messages is an array
           user.messages = user.messages || [];
           return [...prev, user];
         } else {
