@@ -31,6 +31,9 @@ const httpServer = createServer(app);
 // const io = new Server(server);
 const io = new Server(httpServer);
 
+// const ip = "10.0.2.2";
+// const ip = "127.0.0.1";
+// , ip
 httpServer.listen(PORT, () => {
   console.log(`Server is connected to port ${PORT}`);
 });

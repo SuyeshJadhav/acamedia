@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/search_widgets/filter_button.dart';
 import '../widgets/search_widgets/search_bar.dart';
 import '../widgets/search_widgets/search_results_list.dart';
 
@@ -43,7 +44,14 @@ class _SearchPageState extends State<SearchPage> {
         color: const Color.fromARGB(255, 248, 248, 248),
         child: Column(
           children: [
-            SearchBox(onChangedQuery: onChangedQuery),
+            Row(
+              children: [
+                Expanded(
+                  child: SearchBox(onChangedQuery: onChangedQuery),
+                ),
+                const FilterButton(),
+              ],
+            ),
             Expanded(
               child: SearchResultsList(query: query),
             ),

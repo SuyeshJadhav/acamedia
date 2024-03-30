@@ -141,6 +141,7 @@ class _LoginPageState extends State<LoginPage> {
     password = _passwordController.text;
 
     uri = 'http://10.0.2.2:8000/api/user/login';
+    // uri = 'http://localhost:8000/api/user/login';
     final url = Uri.parse(uri);
     try {
       final res = await http.post(url,
