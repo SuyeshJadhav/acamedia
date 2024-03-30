@@ -1,4 +1,7 @@
-//--------------- get current GMT date and time -------------------------
+
+/*********************************************************
+              Get Current GMT Date and Time
+*********************************************************/
 const getTimeStamp = () => {
   const currentDateTime = new Date().toISOString();
   let [date, time] = currentDateTime.split("T");

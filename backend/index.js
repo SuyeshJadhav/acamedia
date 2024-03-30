@@ -7,7 +7,7 @@ require("dotenv").config();
 const UserRouter = require("./routers/userRouter");
 const socketRouter = require("./routers/socketRoutes");
 const chatRouter = require("./routers/chatRouter");
-initiateServer = require("./chatManagement/main");
+initiateServer = require("./socket/main");
 
 const app = express();
 app.use(

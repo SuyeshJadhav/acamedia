@@ -1,5 +1,5 @@
-const { firestoreDB } = require("../firebaseConfig"),
-  { chatsCollectionName, usersCollectionName } = require("../variableNames"),
+const { firestoreDB } = require("../../utils/firebaseConfig"),
+  { chatsCollectionName, usersCollectionName } = require("../../utils/variableNames"),
   admin = require("firebase-admin");
 
 const createChat = async (user1Id, user2Id) => {
