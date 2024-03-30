@@ -51,7 +51,7 @@ class HomePageState extends State<HomePage> {
         child: const Column(
           children: [
             // Chat List
-            Expanded(child: chats()),
+            Expanded(child: Chats()),
           ],
         ),
       ),
