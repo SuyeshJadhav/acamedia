@@ -29,7 +29,12 @@ const PORT = process.env.PORT || 8000;
 const httpServer = createServer(app);
 
 // const io = new Server(server);
-const io = new Server(httpServer);
+// const io = new Server(httpServer);
+const io = require("socket.io")(httpServer, {
+  cors: {
+    origin: "http://localhost:5173",
+  },
+});
 
 // const ip = "10.0.2.2";
 // const ip = "127.0.0.1";

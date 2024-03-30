@@ -3,7 +3,8 @@ import 'package:frontend/util/colors.dart';
 import 'package:frontend/widgets/home_widgets/drawer_list.dart';
 
 class HomeDrawer extends StatelessWidget {
-  const HomeDrawer({super.key});
+  final String name;
+  const HomeDrawer(this.name, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +18,8 @@ class HomeDrawer extends StatelessWidget {
         child: ListView(
           shrinkWrap: true,
           padding: EdgeInsets.zero,
-          children: const [
-            DrawerList(),
+          children: [
+            DrawerList(name),
           ],
         ),
       ),

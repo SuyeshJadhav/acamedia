@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/home_page.dart';
 import 'package:http/http.dart' as http;
 
-class chats extends StatefulWidget {
-  const chats({super.key});
+class Chats extends StatefulWidget {
+  const Chats({super.key});
 
   @override
-  State<chats> createState() => _chatsState();
+  State<Chats> createState() => _ChatsState();
 }
 
-class _chatsState extends State<chats> {
+class _ChatsState extends State<Chats> {
   List<dynamic> chatList = [];
 
   @override
@@ -28,12 +27,13 @@ class _chatsState extends State<chats> {
             itemBuilder: (context, index) {
               final chat = chatList[index];
               final email = chat['email'];
-              final recentMessage = 'Hey, how are you?';
+              const recentMessage = 'Hey, how are you?';
               return ListTile(
                 leading: CircleAvatar(
+                    child: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
                   child: Text(email[0]),
-                  radius: 25.0,
-                ),
+                )),
                 title: Text(email),
                 subtitle: Text(recentMessage),
               );

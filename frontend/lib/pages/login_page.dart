@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/pages/forgot_pass.dart';
 import 'package:frontend/pages/home_page.dart';
-import 'package:http/http.dart' as http;
+import 'package:frontend/services/user_service.dart';
+import '../services/auth_service.dart';
 
 // Styling constants
 const EdgeInsets _inputFieldPadding = EdgeInsets.symmetric(
@@ -108,7 +108,8 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
         ),
-        onPressed: _authenticate,
+        onPressed: () =>
+            _authenticate(_usernameController, _passwordController),
         child: const Text(
           'Login',
           style: TextStyle(
@@ -135,25 +136,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _authenticate() async {
-    final String uri, username, password, userId;
-    username = _usernameController.text;
-    password = _passwordController.text;
-
-    uri = 'http://10.0.2.2:8000/api/user/login';
-    // uri = 'http://localhost:8000/api/user/login';
-    final url = Uri.parse(uri);
-    try {
-      final res = await http.post(url,
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'email': username, 'password': password}));
-
-      final body = jsonDecode(res.body);
-      userId = body['userId'];
-      _pageRoute(userId);
-    } catch (e) {
-      print('Error during auth: $e');
-    }
+  void _authenticate(
+      TextEditingController username, TextEditingController password) async {
+    String id = '';
+    await AuthService.authenticate(username, password).then((value) => {
+          if (value != null)
+            {
+              _pageRoute(value),
+              HelperFunctions.setLoggedInStatus(true),
+              HelperFunctions.setUserId(value),
+              setState(() {
+                id = value;
+              })
+            }
+          else
+            print('No user id found')
+        });
+    await userService.fetchUserData(id).then((data) async => {
+          if (data != null) {await HelperFunctions.setUserData(data)}
+        });
   }
 
   void _pageRoute(String userId) {
