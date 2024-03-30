@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/helpers/helper_functions.dart';
+import 'package:frontend/pages/login_page.dart';
 
-class LogoutBtn extends StatelessWidget {
+class LogoutBtn extends StatefulWidget {
   const LogoutBtn({
     super.key,
   });
 
+  @override
+  State<LogoutBtn> createState() => _LogoutBtnState();
+}
+
+class _LogoutBtnState extends State<LogoutBtn> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: ElevatedButton(
         onPressed: () {
-          //add logout function
+          logout();
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color.fromARGB(195, 255, 0, 0),
@@ -44,5 +51,16 @@ class LogoutBtn extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void logout() async {
+    await HelperFunctions.removeUser().then((value) => {
+          if (value)
+            {
+              HelperFunctions.setLoggedInStatus(false),
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()))
+            }
+        });
   }
 }

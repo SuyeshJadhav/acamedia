@@ -138,22 +138,21 @@ class _LoginPageState extends State<LoginPage> {
 
   void _authenticate(
       TextEditingController username, TextEditingController password) async {
-    String id = '';
     await AuthService.authenticate(username, password).then((value) => {
           if (value != null)
             {
-              _pageRoute(value),
               HelperFunctions.setLoggedInStatus(true),
               HelperFunctions.setUserId(value),
-              setState(() {
-                id = value;
-              })
+              userService.fetchUserData(value).then((data) async => {
+                    if (data != null)
+                      {
+                        await HelperFunctions.setUserData(data),
+                        _pageRoute(value),
+                      }
+                  }),
             }
           else
             print('No user id found')
-        });
-    await userService.fetchUserData(id).then((data) async => {
-          if (data != null) {await HelperFunctions.setUserData(data)}
         });
   }
 

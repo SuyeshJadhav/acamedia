@@ -58,7 +58,7 @@ class HelperFunctions {
         data[keysList[i]] = valuesList[i];
       }
 
-      print(data);
+      print("data fetched!");
       return data;
     } else {
       return null;
@@ -66,4 +66,17 @@ class HelperFunctions {
   }
 
   //Remove Data
+
+  static Future<bool> removeUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      await prefs.remove('userId');
+      await prefs.remove('userData');
+      print("User Removed!");
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }
