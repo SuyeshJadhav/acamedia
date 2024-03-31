@@ -39,18 +39,6 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-  // fetchUserData(userId) async {
-  //   await userService.fetchUsername(userId).then((value) => {
-  //         if (value != null)
-  //           {
-  //             setState(() {
-  //               User = value;
-  //               name = User['fname'] + ' ' + User['lname'];
-  //             })
-  //           }
-  //       });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,11 +1,11 @@
 const admin = require("firebase-admin");
-const { firestoreDB } = require("../firebaseConfig");
+const { firestoreDB } = require("../../utils/firebaseConfig");
 const {
   chatsCollectionName,
   messagesCollectionName,
   usersCollectionName,
-} = require("../variableNames");
-const { getTimeStamp } = require("../helperFunctions");
+} = require("../../utils/variableNames");
+const { getTimeStamp } = require("../../utils/generalHelperFunctions");
 
 //---------------------- store message --------------------------------
 const storeMessage = async (senderId, chatId, message) => {

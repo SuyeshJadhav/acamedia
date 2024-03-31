@@ -1,7 +1,7 @@
-const { firestoreDB } = require("../../firebaseConfig");
-const { usersCollectionName } = require("../../variableNames");
-const { getUserId } = require("../userHelperFunctions");
 const bcrypt = require("bcryptjs");
+const { firestoreDB } = require("../../utils/firebaseConfig");
+const { usersCollectionName } = require("../../utils/variableNames");
+const { getUserId } = require("./userHelperFunctions");
 
 //----------------------------- login --------------------------------
 const login = async (email, password) => {

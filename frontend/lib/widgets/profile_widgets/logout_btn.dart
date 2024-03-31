@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/helpers/helper_functions.dart';
+import 'package:frontend/pages/login_page.dart';
 
-class LogoutBtn extends StatelessWidget {
+class LogoutBtn extends StatefulWidget {
   const LogoutBtn({
     super.key,
   });
 
+  @override
+  State<LogoutBtn> createState() => _LogoutBtnState();
+}
+
+class _LogoutBtnState extends State<LogoutBtn> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: ElevatedButton(
         onPressed: () {
-          // Show confirmation dialog
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -24,16 +30,13 @@ class LogoutBtn extends StatelessWidget {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      // Cancel logout
                       Navigator.of(context).pop();
                     },
                     child: const Text('Cancel'),
                   ),
                   TextButton(
                     onPressed: () {
-                      // Perform logout
-                      // Call your logout function here
-                      // For now, just pop the dialog
+                      logout();
                       Navigator.of(context).pop();
                     },
                     child: const Text(
@@ -77,5 +80,16 @@ class LogoutBtn extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void logout() async {
+    await HelperFunctions.removeUser().then((value) => {
+          if (value)
+            {
+              HelperFunctions.setLoggedInStatus(false),
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()))
+            }
+        });
   }
 }

@@ -1,7 +1,10 @@
-const { firestoreDB } = require("../firebaseConfig");
-const { chatsCollectionName } = require("../variableNames");
+const { firestoreDB } = require("../../utils/firebaseConfig");
+const { chatsCollectionName } = require("../../utils/variableNames");
 
-// ------------------- GET CHAT ID FROM 2 USER'S ID ---------------------
+
+/*********************************************************
+              Get Chat ID from 2 User's Data
+*********************************************************/
 const getChatId = async (user1Id, user2Id) => {
   const chatCollectionRef = firestoreDB.collection(chatsCollectionName);
   const chatIdQuery1 = chatCollectionRef.where("users", "==", [
@@ -15,6 +18,7 @@ const getChatId = async (user1Id, user2Id) => {
 
   try {
     let chatDocs = await chatIdQuery1.get();
+    console.log(chatDocs.docs);
     if (chatDocs.docs.length <= 0) chatDocs = await chatIdQuery2.get();
     if (chatDocs.docs.length <= 0){
       console.log("Couldn't find chatId.");

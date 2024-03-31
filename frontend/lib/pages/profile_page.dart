@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/helpers/helper_functions.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../widgets/profile_widgets/logout_btn.dart';
 
@@ -11,6 +12,31 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   bool notificationsEnabled = true;
+  Map<String, dynamic> user = {};
+  String name = '', branch = '', email = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchData();
+  }
+
+  void fetchData() async {
+    await HelperFunctions.getUserData().then((value) => {
+          if (value != null)
+            {
+              setState(() {
+                user = value;
+                name = user['fname'] + ' ' + user['lname'];
+                branch = user['branch'];
+                email = user['email'];
+                name = name.toUpperCase();
+                branch = branch.toUpperCase();
+              })
+            }
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,23 +68,30 @@ class ProfilePageState extends State<ProfilePage> {
               children: [
                 GestureDetector(
                   onTap: () {},
-                  child: const CircleAvatar(
-                    backgroundImage: AssetImage('lib/assets/p1.jpg'),
+                  child: CircleAvatar(
                     radius: 100.0,
+                    child: Text(
+                      name.isNotEmpty ? name[0] : '',
+                      style: const TextStyle(
+                          fontSize: 45, fontWeight: FontWeight.w900),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  "NAME NAME",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+                Text(
+                  name,
+                  style: const TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.w700),
                 ),
-                const Text(
-                  "NAME NAME",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                Text(
+                  "Email : $email",
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w400),
                 ),
-                const Text(
-                  "NAME NAME",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                Text(
+                  "Branch : $branch",
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 20),
                 Padding(
