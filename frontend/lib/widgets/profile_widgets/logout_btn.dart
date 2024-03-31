@@ -11,7 +11,40 @@ class LogoutBtn extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: ElevatedButton(
         onPressed: () {
-          //add logout function
+          // Show confirmation dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Logout'),
+                content: const Text('Are you sure you want to logout?'),
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 25.0,
+                    vertical: 10.0), // Adjust the content padding
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      // Cancel logout
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      // Perform logout
+                      // Call your logout function here
+                      // For now, just pop the dialog
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Logout',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color.fromARGB(195, 255, 0, 0),

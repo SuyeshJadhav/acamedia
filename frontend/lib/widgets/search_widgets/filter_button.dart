@@ -1,47 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/util/colors.dart';
 
 class FilterButton extends StatelessWidget {
-  const FilterButton({
-    super.key,
-  });
+  const FilterButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 8.0, top: 5.0, bottom: 8.0),
-      child: PopupMenuButton<String>(
-        icon: const Icon(Icons.filter_list),
-        onSelected: (String filter) {
-          // Handle the selected filter
-          print('Selected filter: $filter');
-          // Implement logic to apply filter
+      padding: const EdgeInsets.only(right: 8.0),
+      child: IconButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Select Filter'),
+                content: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text('Filter 1'),
+                        onTap: () {
+                          // Handle selection of Filter 1
+                          Navigator.of(context).pop('Filter 1');
+                        },
+                      ),
+                      ListTile(
+                        title: Text('Filter 2'),
+                        onTap: () {
+                          // Handle selection of Filter 2
+                          Navigator.of(context).pop('Filter 2');
+                        },
+                      ),
+                      // Add more filters as needed
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
         },
-        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-          const PopupMenuItem<String>(
-            value: 'Filter 1',
-            child: Text('Filter 1'),
-          ),
-          const PopupMenuItem<String>(
-            value: 'Filter 2',
-            child: Text('Filter 2'),
-          ),
-          const PopupMenuItem<String>(
-            value: 'Filter 3',
-            child: Text('Filter 3'),
-          ),
-          // Add more filters as needed
-        ],
-        tooltip: 'Filter options',
-        elevation: 8, // Set elevation
-        padding: const EdgeInsets.symmetric(
-            vertical: 8, horizontal: 12), // Set padding
-        shape: RoundedRectangleBorder(
-          // Set shape
-          borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(color: Colors.grey), // Add border
-        ),
-        surfaceTintColor: AppColors.blueGreen,
+        icon: const Icon(Icons.tune), // Use the tune icon
+        color: Colors.black,
       ),
     );
   }
