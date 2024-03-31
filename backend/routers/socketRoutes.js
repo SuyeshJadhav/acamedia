@@ -3,11 +3,10 @@ const router = Router();
 const path = require("path");
 
 const {
-  getUserData,
-  getDataById,
-} = require("../controllers/userControllers/userHelperFunctions");
-const { getChatId } = require("../chatManagement/chatHelperFunction");
-const initiateServer = require("../chatManagement/main");
+  getUserDataById
+} = require("../controllers/userController/userHelperFunctions");
+const { getChatId } = require("../controllers/chatController/chatHelperFunction");
+const initiateServer = require("../socket/main");
 
 router.get("/", (req, res) => {
   const indexPath = path.join(__dirname, "..", "views", "index.html");
@@ -17,7 +16,7 @@ router.get("/", (req, res) => {
 router.post("/direct", async (req, res) => {
   const { sender_id, receiver_id } = req.body;
   // console.log(sender_id, receiver_id);
-  const resp = await getDataById(receiver_id);
+  const resp = await getUserDataById(receiver_id);
   // console.log(resp);
   const chatId = await getChatId(sender_id, receiver_id);
   return res.status(201).json({ message: "Received ID: " + chatId });

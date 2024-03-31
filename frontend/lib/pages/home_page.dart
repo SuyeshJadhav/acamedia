@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/services/user_service.dart';
+import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/widgets/home_widgets/home_appbar.dart';
 import 'package:frontend/widgets/home_widgets/home_drawer.dart';
 // import '../widgets/home_widgets/chat_tile.dart';
@@ -18,26 +18,25 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Map<String, dynamic> user = {};
   String name = '';
 
   @override
   initState() {
     // TODO: implement initState
     super.initState();
-    fetchUserData(widget.userId);
+    fetchUserData();
   }
 
-  fetchUserData(userId) async {
-    await userService.fetchUserData(userId).then((value) => {
-          if (value != null)
-            {
-              setState(() {
-                name = value;
-              })
-            }
-          else
-            {name = "NAME NAME"}
+  fetchUserData() async {
+    await HelperFunctions.getUserData().then((value) {
+      if (value != null && value['fname'] != null && value['lname'] != null) {
+        setState(() {
+          user = value;
+          name = '${value['fname']} ${value['lname']}';
         });
+      }
+    });
   }
 
   @override
@@ -51,7 +50,7 @@ class HomePageState extends State<HomePage> {
         child: const Column(
           children: [
             // Chat List
-            Expanded(child: chats()),
+            Expanded(child: Chats()),
           ],
         ),
       ),

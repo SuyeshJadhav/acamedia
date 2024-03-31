@@ -7,7 +7,7 @@ require("dotenv").config();
 const UserRouter = require("./routers/userRouter");
 const socketRouter = require("./routers/socketRoutes");
 const chatRouter = require("./routers/chatRouter");
-initiateServer = require("./chatManagement/main");
+initiateServer = require("./socket/main");
 
 const app = express();
 app.use(
@@ -36,6 +36,9 @@ const io = require("socket.io")(httpServer, {
   },
 });
 
+// const ip = "10.0.2.2";
+// const ip = "127.0.0.1";
+// , ip
 httpServer.listen(PORT, () => {
   console.log(`Server is connected to port ${PORT}`);
 });

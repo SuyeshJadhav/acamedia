@@ -9,10 +9,11 @@ class SearchBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
         child: Center(
           child: SizedBox(
-            width: 350,
+            width: 340,
+            height: 50,
             child: TextField(
               onChanged: onChangedQuery,
               decoration: const InputDecoration(
