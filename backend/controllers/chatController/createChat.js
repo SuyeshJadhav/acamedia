@@ -1,7 +1,7 @@
 const { firestoreDB } = require("../../utils/firebaseConfig");
 const { collectionNames, statusCodes } = require("../../utils/variableNames");
 const { getUserDataById } = require("../userController/getUserData");
-const { addChatToUser, getChatId } = require( "./chatHelperFunction" );
+const { addChatToUser, getChatId } = require("./chatHelperFunction");
 
 /*********************************************************
                     Create Chat
@@ -29,8 +29,18 @@ const createChat = async (user1Id, user2Id) => {
       status: 404
     };
 
-  const ExistingChatId = getChatId(user1Id, user2Id);
-  
+  const existingChat = getChatId(user1Id, user2Id);
+
+  if (existingChat.status === collectionNames.CHAT_FOUND)
+    return {
+      message: `Chat between ${user1Id} and ${user2Id} exists already`,
+      status: 200
+    };
+  else if (existingChat.status === collectionNames.SERVER_ERROR)
+    return {
+      message: "Error creating new chat",
+      status: 500
+    };
 
   let chatId;
 
@@ -55,7 +65,7 @@ const createChat = async (user1Id, user2Id) => {
 
   //add chat to user1 and user2 chats array
   const chatAddedToUser1 = await addChatToUser(chatId, user1Id);
-  if (!chatAddedToUser1) 
+  if (!chatAddedToUser1)
     return {
       message: `Error creating new chat`,
       status: 500

@@ -2,7 +2,6 @@ const admin = require("firebase-admin");
 const { firestoreDB } = require("../../utils/firebaseConfig");
 const { collectionNames } = require("../../utils/variableNames");
 
-
 /*********************************************************
               Get Chat ID from 2 User's Data
 *********************************************************/
@@ -22,32 +21,32 @@ const getChatId = async (user1Id, user2Id) => {
     console.log(chatDocs.docs);
     // if 1st query can't find chatId, check with 2nd query
     if (chatDocs.docs.length <= 0) chatDocs = await chatIdQuery2.get();
-    if (chatDocs.docs.length <= 0){
+    if (chatDocs.docs.length <= 0) {
       console.log("Couldn't find chatId.");
-      return false;
+      return { status: collectionNames.CHAT_NOT_FOUND };
     }
     const chatId = chatDocs.docs[0].id;
-    return chatId;
+    return { chatId, status: collectionNames.CHAT_FOUND };
   } catch (error) {
     console.log(`Error fetching chat ID :- \n${error}`);
-    return false;
+    return { status: collectionNames.SERVER_ERROR };
   }
 };
 
 /*********************************************************
                       Delete Chat
 *********************************************************/
-const deleteChat = (chatId) => {
+const deleteChat = chatId => {
   const chatRef = firestoreDB.collection(collectionNames.CHATS).doc(chatId);
 
-  try{
+  try {
     chatRef.delete();
     return true;
-  } catch(error) {
+  } catch (error) {
     console.log(`Error deleting chat ${chatId}:- \n${error}`);
     return false;
   }
-}
+};
 
 /*********************************************************
                     Add Chat to User
@@ -61,10 +60,12 @@ const addChatToUser = async (chatId, userId) => {
     });
   } catch (error) {
     deleteChat(chatId);
-    console.error(`Error adding chatId ${chatId} to user ${userId} :- \n${error}`);
+    console.error(
+      `Error adding chatId ${chatId} to user ${userId} :- \n${error}`
+    );
     return false;
   }
   return true;
 };
 
-module.exports = { getChatId , deleteChat, addChatToUser};
+module.exports = { getChatId, deleteChat, addChatToUser };

@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const { firestoreDB } = require("../../utils/firebaseConfig");
 const { collectionNames, statusCodes } = require("../../utils/variableNames");
 const { getUserIdByEmail } = require("./userHelperFunctions");
-const { getUserDataById } = require( "./getUserData" );
+const { getUserDataById } = require("./getUserData");
 
 /*********************************************************
                      Login User
@@ -21,7 +21,7 @@ const login = async (email, password) => {
     };
 
   // get user data
-  const userData = getUserDataById(user);
+  const user = await getUserDataById(userId.result);
   if (userId.status === statusCodes.SERVER_ERROR)
     return {
       message: `Error authorizing user`,
@@ -32,7 +32,8 @@ const login = async (email, password) => {
       message: `Unable to fetch user data`,
       status: 404
     };
-
+  const userData = user.userData;
+  
   // check if password matches
   try {
     const savedPassword = userData.password;
@@ -41,10 +42,14 @@ const login = async (email, password) => {
       return { message: "Wrong password.", status: 403 };
     }
   } catch (error) {
-    console.log(`Error checking password :- ${error.message}`);
+    console.log(`Error checking password :- \n${error.message}`);
+    return {
+      message: `Error authorizing user`,
+      status: 500
+    };
   }
   return {
-    userId: userDoc.id,
+    userId: userData.result,
     message: `User login successful`,
     status: 200
   };
