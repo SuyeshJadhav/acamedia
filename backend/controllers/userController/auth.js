@@ -39,9 +39,7 @@ const login = async (email, password) => {
   try {
     const savedPassword = userData.password;
     const passwordsMatch = await bcrypt.compare(password, savedPassword);
-    if (!passwordsMatch) {
-      return { message: "Wrong password.", status: 403 };
-    }
+    if (!passwordsMatch) return { message: "Wrong password", status: 403 };
   } catch (error) {
     console.log(`Error checking password :- \n${error.message}`);
     return {
