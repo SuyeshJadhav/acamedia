@@ -1,7 +1,7 @@
 const { Router } = require("express");
-const createChat = require("../chatManagement/createChat");
-const { storeMessage, deleteMessage } = require("../chatManagement/messageManagement");
-const { getChatId } = require( "../chatManagement/chatHelperFunction" );
+const createChat = require("../controllers/chatController/createChat");
+const { storeMessage, deleteMessage } = require("../controllers/chatController/messageManagement");
+const { getChatId } = require( "../controllers/chatController/chatHelperFunction" );
 
 const router = Router();
 

@@ -1,11 +1,9 @@
 const admin = require("firebase-admin");
-const { firestoreDB } = require("../firebaseConfig");
+const { firestoreDB } = require("../../utils/firebaseConfig");
 const {
-  chatsCollectionName,
-  messagesCollectionName,
-  usersCollectionName,
-} = require("../variableNames");
-const { getTimeStamp } = require("../helperFunctions");
+  collectionNames,
+} = require("../../utils/variableNames");
+const { getTimeStamp } = require("../../utils/generalHelperFunctions");
 
 //---------------------- store message --------------------------------
 const storeMessage = async (senderId, chatId, message) => {
@@ -17,8 +15,8 @@ const storeMessage = async (senderId, chatId, message) => {
     };
   }
 
-  const chatRef = firestoreDB.collection(chatsCollectionName).doc(chatId);
-  const messageCollectionRef = chatRef.collection(messagesCollectionName);
+  const chatRef = firestoreDB.collection(collectionNames.CHATS).doc(chatId);
+  const messageCollectionRef = chatRef.collection(collectionNames.MESSAGES);
 
   // store message in database with timestamp
   try {
@@ -48,8 +46,8 @@ const deleteMessage = async (userId, chatId, messageId) => {
     };
   }
 
-  const chatRef = firestoreDB.collection(chatsCollectionName).doc(chatId);
-  const messageRef = chatRef.collection(messagesCollectionName).doc(messageId);
+  const chatRef = firestoreDB.collection(collectionNames.CHATS).doc(chatId);
+  const messageRef = chatRef.collection(collectionNames.MESSAGES).doc(messageId);
 
   try {
     await messageRef.delete();
@@ -67,7 +65,7 @@ const deleteMessage = async (userId, chatId, messageId) => {
 //------- check if the chatId belongs to the user's chats array ---------
 const checkUser = async (userId, chatId) => {
   try {
-    const userRef = firestoreDB.collection(usersCollectionName).doc(userId);
+    const userRef = firestoreDB.collection(collectionNames.USERS).doc(userId);
     const userDoc = await userRef.get();
     if (!userDoc.exists) return false;
 

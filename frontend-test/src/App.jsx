@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import socket from "./socket";
 import Chat from "./components/Chat";
 
+import NewPage from "./pages/NewPage";
+
+import { Routes, Route } from "react-router-dom";
+
 const App = () => {
   const [username, setUsername] = useState("");
   const [showForm, setShowForm] = useState(true);
@@ -17,18 +21,18 @@ const App = () => {
   };
 
   useEffect(() => {
-    const sessionID = localStorage.getItem("sessionID");
+    // const sessionID = localStorage.getItem("sessionID");
 
-    if (sessionID) {
-      socket.auth = { sessionID };
-      socket.connect();
-    }
+    // if (sessionID) {
+    //   socket.auth = { sessionID };
+    //   socket.connect();
+    // }
 
-    socket.on("session", ({ sessionID, userID }) => {
-      socket.auth = { sessionID };
-      localStorage.setItem("sessionID", sessionID);
-      socket.userID = userID;
-    });
+    // socket.on("session", ({ sessionID, userID }) => {
+    //   socket.auth = { sessionID };
+    //   localStorage.setItem("sessionID", sessionID);
+    //   socket.userID = userID;
+    // });
 
     socket.on("connect_error", (err) => {
       if (err.message === "invalid username") {
@@ -42,19 +46,29 @@ const App = () => {
 
   return (
     <div className="p-10">
-      {showForm && (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Username"
-            className="border-2"
-            value={username}
-            onChange={handleUsernameChange}
-          />
-          <input type="submit" value="Submit" />
-        </form>
-      )}
-      {!showForm && <Chat />}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              {showForm && (
+                <form onSubmit={handleSubmit}>
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    className="border-2"
+                    value={username}
+                    onChange={handleUsernameChange}
+                  />
+                  <input type="submit" value="Submit" />
+                </form>
+              )}
+              {!showForm && <Chat />}
+            </>
+          }
+        />
+        <Route path="/test/:id" element={<NewPage />} />
+      </Routes>
     </div>
   );
 };

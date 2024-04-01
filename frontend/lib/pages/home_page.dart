@@ -29,15 +29,14 @@ class HomePageState extends State<HomePage> {
   }
 
   fetchUserData() async {
-    await HelperFunctions.getUserData().then((value) => {
-          if (value != null)
-            {
-              setState(() {
-                user = value;
-                name = user['fname'] + ' ' + user['lname'];
-              })
-            }
+    await HelperFunctions.getUserData().then((value) {
+      if (value != null && value['fname'] != null && value['lname'] != null) {
+        setState(() {
+          user = value;
+          name = '${value['fname']} ${value['lname']}';
         });
+      }
+    });
   }
 
   @override

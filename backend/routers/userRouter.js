@@ -1,8 +1,7 @@
 const { Router } = require("express");
-const { createUser } = require("../controllers/userControllers/userManagement");
-const { getUserId } = require("../controllers/userHelperFunctions");
-const { login } = require("../controllers/userControllers/userAuth");
-const { getUserData } = require("../controllers/userControllers/userHelperFunctions");
+const { createUser } = require("../controllers/userController/createUser");
+const { login } = require("../controllers/userController/auth");
+const { getUserData } = require("../controllers/userController/getUserData");
 
 const router = Router();
 
@@ -25,15 +24,15 @@ router.post("/login", async (req, res) => {
   res.send(result);
 });
 
-router.post("/create-user", async (req, res) => {
+router.post("/register", async (req, res) => {
   const user = req.body;
   const result = await createUser(user);
   res.send(result);
 });
 
-router.post("/get-user", async(req,res) => {
-  const {email, userId} = req.body;
-  const result = await getUserData(email, userId);
+router.get("/get-data/:userId", async(req,res) => {
+  const userId = req.params.userId;
+  const result = await getUserData(userId);
   res.send(result);
 })
 
