@@ -33,7 +33,8 @@ const login = async (email, password) => {
       status: 404
     };
   const userData = user.userData;
-  
+  console.log(userData);
+
   // check if password matches
   try {
     const savedPassword = userData.password;
@@ -49,7 +50,7 @@ const login = async (email, password) => {
     };
   }
   return {
-    userId: userData.result,
+    userId: userId.result,
     message: `User login successful`,
     status: 200
   };
