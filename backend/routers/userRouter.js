@@ -30,8 +30,8 @@ router.post("/register", async (req, res) => {
   res.send(result);
 });
 
-router.get("/get-data", async(req,res) => {
-  const {email, userId} = req.body;
+router.get("/get-data/:userId", async(req,res) => {
+  const {email, userId} = req.params;
   const result = await getUserData(email, userId);
   res.send(result);
 })

@@ -1,11 +1,11 @@
 const bcrypt = require("bcryptjs");
 const { firestoreDB } = require("../../utils/firebaseConfig");
 const { usersCollectionName } = require("../../utils/variableNames");
-const { getUserId } = require("./userHelperFunctions");
+const { getUserIdB, getUserIdByEmail } = require("./userHelperFunctions");
 
 //----------------------------- login --------------------------------
 const login = async (email, password) => {
-  const userId = await getUserId(email);
+  const userId = await getUserIdByEmail(email);
   // const userId = await checkUserInIndex(email);
   // check if user exists
   if (userId === false || userId === "NoUser") {
@@ -39,4 +39,4 @@ const login = async (email, password) => {
 }
 
 
-module.exports = {login}
+module.exports = { login }
