@@ -18,6 +18,7 @@ class AuthService {
 
       final body = jsonDecode(res.body);
       userId = body['userId'];
+      print(userId + " fetched.");
       return userId;
     } catch (e) {
       print('Error during auth: $e');
