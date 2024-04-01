@@ -11,7 +11,7 @@ const initiateServer = (io) => {
     // console.log("----------------");
 
     socket.on("join", (roomName) => {
-      console.log(roomName);
+      // console.log(roomName);
 
       Array.from(socket.rooms)
         .filter((it) => it !== socket.id)
@@ -33,7 +33,7 @@ const initiateServer = (io) => {
     });
 
     socket.on("onMessage", (msg) => {
-      console.log(msg);
+      // console.log(msg);
     });
 
     // socket.on("private message", ({ content, to }) => {
