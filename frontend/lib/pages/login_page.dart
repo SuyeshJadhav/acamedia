@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _pageRoute(String userId) {
-    Navigator.push(
+    Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => HomePage(

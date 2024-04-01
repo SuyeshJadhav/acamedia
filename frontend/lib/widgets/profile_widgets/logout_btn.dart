@@ -58,8 +58,11 @@ class _LogoutBtnState extends State<LogoutBtn> {
           if (value)
             {
               HelperFunctions.setLoggedInStatus(false),
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()))
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                (route) => false,
+              )
             }
         });
   }
