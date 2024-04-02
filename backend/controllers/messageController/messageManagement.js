@@ -21,7 +21,7 @@ const storeMessage = async (senderId, senderRole, receiverRole, chatId, message)
       status: 400
     };
 
-  if(!(senderRole === receiverRole === "student")){
+  if(!(senderRole === "student" && receiverRole === "student")){
     const result = await checkMessageValidity(message.text, senderRole);
     if(result.status === statusCodes.INAPPROPRIATE_MESSAGE) return {message: result.message, status: 403 };
   }
