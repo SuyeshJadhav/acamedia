@@ -15,15 +15,16 @@ const getChatData = async (chatId, userId) => {
 		const users = chatDoc.data().users;
     if (!users.includes(userId))
       return { message: `Unable to find user ${userId} in chat ${chatId}` };
-		// fetch receiver, which is the other user in the users array
-    const receiver = users[0] === userId ? users[1] : users[0];
+		// fetch the other user in the users array
+    const otherUser = users[0] === userId ? users[1] : users[0];
 
 		// list all messages of the chat
-    const messageDocs = await messageCollectionRef.get();
+    const messageDocs = await messageCollectionRef.orderBy("timeStamp").get();
+
     let messageList = [];
     messageDocs.forEach(message => messageList.push(message.data()));
 
-    return { receiver, messageList, status: 200 };
+    return { otherUser, messageList, status: 200 };
   } catch (error) {
     console.error(`Error fetching chat data:- \n${error}`);
     return { message: "Error fetching chat data", status: 500 };

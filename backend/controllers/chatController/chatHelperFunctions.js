@@ -18,18 +18,16 @@ const getChatId = async (user1Id, user2Id) => {
 
   try {
     let chatDocs = await chatIdQuery1.get();
-    console.log(chatDocs.docs);
     // if 1st query can't find chatId, check with 2nd query
     if (chatDocs.docs.length <= 0) chatDocs = await chatIdQuery2.get();
-    if (chatDocs.docs.length <= 0) {
-      console.log("Couldn't find chatId.");
-      return { status: collectionNames.CHAT_NOT_FOUND };
-    }
+    if (chatDocs.docs.length <= 0)
+      return { status: statusCodes.CHAT_NOT_FOUND };
+
     const chatId = chatDocs.docs[0].id;
-    return { chatId, status: collectionNames.CHAT_FOUND };
+    return { chatId, status: statusCodes.CHAT_FOUND };
   } catch (error) {
     console.log(`Error fetching chat ID :- \n${error}`);
-    return { status: collectionNames.SERVER_ERROR };
+    return { status: statusCodes.SERVER_ERROR };
   }
 };
 
@@ -74,6 +72,7 @@ const checkChatInUser = async (userId, chatId) => {
   try {
     // check if user exists
     const userRef = firestoreDB.collection(collectionNames.USERS).doc(userId);
+    console.log(userId);
     const userDoc = await userRef.get();
     if (!userDoc.exists)
       return { result: false, status: statusCodes.USER_NOT_FOUND };

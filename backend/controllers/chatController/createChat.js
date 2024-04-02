@@ -30,12 +30,12 @@ const createChat = async (user1Id, user2Id) => {
       status: 404
     };
 
-  const existingChat = getChatId(user1Id, user2Id);
+  const existingChat = await getChatId(user1Id, user2Id);
 
-  if (existingChat.status === collectionNames.CHAT_FOUND)
+  if (existingChat.status === statusCodes.CHAT_FOUND)
     return {
       message: `Chat between ${user1Id} and ${user2Id} exists already`,
-      status: 200
+      status: 400
     };
   else if (existingChat.status === collectionNames.SERVER_ERROR)
     return {

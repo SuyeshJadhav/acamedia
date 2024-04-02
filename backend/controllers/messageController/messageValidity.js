@@ -60,7 +60,6 @@ const checkMessageValidity = async (message, role) => {
     const response = await result.response;
     const answer = response.text();
     const [isValid, reason] = answer.split("\n" || "," || ".");
-    console.log(reason);
     if(isValid.toLowerCase() === "no") return {message: reason, status: statusCodes.INAPPROPRIATE_MESSAGE};
     else return {status: statusCodes.APPROPRIATE_MESSAGE};
   } catch (error) {
