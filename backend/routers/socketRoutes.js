@@ -7,7 +7,7 @@ const {
 } = require("../controllers/userController/userHelperFunctions");
 const {
   getChatId
-} = require("../controllers/chatController/chatHelperFunction");
+} = require("../controllers/chatController/chatHelperFunctions");
 const initiateServer = require("../socket/main");
 
 router.get("/", (req, res) => {

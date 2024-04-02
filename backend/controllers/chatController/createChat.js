@@ -1,7 +1,8 @@
 const { firestoreDB } = require("../../utils/firebaseConfig");
+const { getTimeStamp } = require( "../../utils/generalHelperFunctions" );
 const { collectionNames, statusCodes } = require("../../utils/variableNames");
 const { getUserDataById } = require("../userController/getUserData");
-const { addChatToUser, getChatId } = require("./chatHelperFunction");
+const { addChatToUser, getChatId } = require("./chatHelperFunctions");
 
 /*********************************************************
                     Create Chat
@@ -46,13 +47,10 @@ const createChat = async (user1Id, user2Id) => {
 
   //create new chat and add the user1 and user2 as members
   try {
-    const user1Ref = firestoreDB.collection(collectionNames.USERS).doc(user1Id);
-    const user2Ref = firestoreDB.collection(collectionNames.USERS).doc(user2Id);
-
     const chatCollectionRef = firestoreDB.collection(collectionNames.CHATS);
     const chatDoc = await chatCollectionRef.add({
-      users: [user1Ref, user2Ref],
-      messages: []
+      users: [user1Id, user2Id],
+      timeStamp: getTimeStamp()
     });
     chatId = chatDoc.id;
   } catch (error) {

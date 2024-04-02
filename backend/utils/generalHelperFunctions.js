@@ -1,4 +1,3 @@
-
 /*********************************************************
               Get Current GMT Date and Time
 *********************************************************/
@@ -7,7 +6,11 @@ const getTimeStamp = () => {
   let [date, time] = currentDateTime.split("T");
   [time, _] = time.split(".");
 
-  return { date, time };
-}
+  date = date.split("-").join("");
+  time = time.split(":").join("");
 
-module.exports = {getTimeStamp};
+  const timeStamp = date.concat(time);
+  return timeStamp;
+};
+
+module.exports = { getTimeStamp };

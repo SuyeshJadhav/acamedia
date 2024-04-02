@@ -14,7 +14,7 @@ const getUserData = async userId => {
     };
   else if (user.status === statusCodes.USER_NOT_FOUND)
     return {
-      message: `Couldn't find user with given ${email ? "email" : "ID"}`,
+      message: `Couldn't find user with given ID`,
       status: 404
     };
   const userData = user.userData;
