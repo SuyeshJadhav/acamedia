@@ -4,14 +4,13 @@ import 'package:http/http.dart' as http;
 class userService {
   static Future<List<String>?> fetchUserData(String userId) async {
     final uri, url;
-    uri = 'http://10.0.2.2:8000/api/user/get-data?userId=${userId}';
+    uri = 'http://10.0.2.2:8000/api/user/get-data/Ip71HezCXgY3to3JhKAj';
     url = Uri.parse(uri);
 
     try {
-      final res = await http.post(url,
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'userId': userId}));
+      final res = await http.get(url);
       final body = jsonDecode(res.body);
+      print(res);
       List<String> dataList = [];
       body.forEach((key, value) {
         dataList.add('$key: $value');
