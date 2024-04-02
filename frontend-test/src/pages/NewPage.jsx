@@ -9,28 +9,54 @@ const NewPage = () => {
 
   const [inputValue, setInputValue] = useState("");
 
+  const chatIDMap = {
+    DNBN2BX3QUig1UDQy0x8: ["Ip71HezCXgY3to3JhKAj", "nq0qxaBJV5wsXrmWkHLP"],
+    chtxhjb7nQXFnqQvwtQx: ["AXVw4MhGrTPqeAd0vuEG", "nq0qxaBJV5wsXrmWkHLP"],
+    gueRyBFYL7r9LkJAkN4Q: ["Ip71HezCXgY3to3JhKAj", "TsbwjVd4WmhWqp5DOh8f"],
+    k9QJYjETrDrjS6je3FCh: ["AXVw4MhGrTPqeAd0vuEG", "Ip71HezCXgY3to3JhKAj"],
+    rDOodbR03wqh9krgUnUj: ["AXVw4MhGrTPqeAd0vuEG", "TsbwjVd4WmhWqp5DOh8f"],
+    tvR1BlcvSPCEn17plTPI: ["TsbwjVd4WmhWqp5DOh8f", "nq0qxaBJV5wsXrmWkHLP"],
+  };
+
+  const generateChatID = (u1ID, u2ID) => {
+    for (const [chatID, uIDs] of Object.entries(chatIDMap)) {
+      if (uIDs.includes(u1ID) && uIDs.includes(u2ID) && u1ID !== u2ID) {
+        return chatID;
+      }
+    }
+
+    return null;
+  };
+
   const [users, setUsers] = useState([
+    {
+      name: "Dhruv",
+      userID: "AXVw4MhGrTPqeAd0vuEG",
+      chatID: generateChatID(id, "AXVw4MhGrTPqeAd0vuEG"),
+      messages: [],
+    },
     {
       name: "Aditya",
       userID: "nq0qxaBJV5wsXrmWkHLP",
-      chatID: "sStYpjUVDA57phEOHmlp",
+      chatID: generateChatID(id, "nq0qxaBJV5wsXrmWkHLP"),
       messages: [],
     },
     {
       name: "Suyesh",
       userID: "Ip71HezCXgY3to3JhKAj",
-      chatID: "gZLNQnF23wORTU3TQkMz",
+      chatID: generateChatID(id, "Ip71HezCXgY3to3JhKAj"),
       messages: [],
     },
     {
-      name: "Dhruv",
-      userID: "AXVw4MhGrTPqeAd0vuEG",
-      chatID: "sStYpjUVDA57phEOHmlp",
+      name: "Vedant",
+      userID: "TsbwjVd4WmhWqp5DOh8f",
+      chatID: generateChatID(id, "TsbwjVd4WmhWqp5DOh8f"),
       messages: [],
     },
   ]);
 
   const handleClick = (user) => {
+    const chatID = generateChatID(id, user.userID);
     setUser(user);
     socket.emit("join", user.chatID);
   };
@@ -109,7 +135,7 @@ const NewPage = () => {
     socket.emit(`emitMessage`, message);
   };
 
-  // console.log(users);
+  console.log(users);
 
   return (
     <div>

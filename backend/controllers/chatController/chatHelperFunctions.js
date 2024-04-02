@@ -1,6 +1,6 @@
 const admin = require("firebase-admin");
 const { firestoreDB } = require("../../utils/firebaseConfig");
-const { collectionNames } = require("../../utils/variableNames");
+const { collectionNames, statusCodes } = require("../../utils/variableNames");
 
 /*********************************************************
               Get Chat ID from 2 User's Data
@@ -53,10 +53,9 @@ const deleteChat = chatId => {
 *********************************************************/
 const addChatToUser = async (chatId, userId) => {
   const userRef = firestoreDB.collection(collectionNames.USERS).doc(userId);
-  const chatRef = firestoreDB.collection(collectionNames.CHATS).doc(chatId);
   try {
     await userRef.update({
-      chats: admin.firestore.FieldValue.arrayUnion(chatRef)
+      chats: admin.firestore.FieldValue.arrayUnion(chatId)
     });
   } catch (error) {
     deleteChat(chatId);
@@ -68,4 +67,27 @@ const addChatToUser = async (chatId, userId) => {
   return true;
 };
 
-module.exports = { getChatId, deleteChat, addChatToUser };
+/*********************************************************
+          Check if Chat Exists in User's Chats List
+*********************************************************/
+const checkChatInUser = async (userId, chatId) => {
+  try {
+    // check if user exists
+    const userRef = firestoreDB.collection(collectionNames.USERS).doc(userId);
+    const userDoc = await userRef.get();
+    if (!userDoc.exists)
+      return { result: false, status: statusCodes.USER_NOT_FOUND };
+
+    // check if chat exists in user
+    const chats = userDoc.data().chats;
+    if (!chats.includes(chatId))
+      return { result: false, status: statusCodes.CHAT_NOT_IN_USER };
+
+    return { result: true };
+  } catch (error) {
+    console.error(`Error checking chat in user data:- \n${error}`);
+    return { result: false, status: statusCodes.SERVER_ERROR };
+  }
+};
+
+module.exports = { getChatId, deleteChat, addChatToUser, checkChatInUser };

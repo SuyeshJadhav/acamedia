@@ -28,11 +28,15 @@ class ProfilePageState extends State<ProfilePage> {
             {
               setState(() {
                 user = value;
-                name = user['fname'] + ' ' + user['lname'];
-                branch = user['branch'];
-                email = user['email'];
-                name = name.toUpperCase();
-                branch = branch.toUpperCase();
+                String firstName =
+                    user['fname'] ?? ''; // Null check for first name
+                String lastName =
+                    user['lname'] ?? ''; // Null check for last name
+                name = (firstName + ' ' + lastName)
+                    .toUpperCase(); // Concatenate and convert to uppercase
+                branch = user['branch'] ?? ''; // Null check for branch
+                email = user['email'] ?? ''; // Null check for email
+                branch = branch.toUpperCase(); // Convert branch to uppercase
               })
             }
         });
