@@ -5,7 +5,8 @@ import '../widgets/message_widgets/message_widget.dart';
 import '../widgets/message_widgets/text_input_field.dart';
 
 class ChatPage extends StatelessWidget {
-  const ChatPage({super.key});
+  final String receiverName;
+  const ChatPage({super.key, required this.receiverName});
 
   @override
   Widget build(BuildContext context) {
@@ -80,16 +81,21 @@ class ChatPage extends StatelessWidget {
         padding: EdgeInsets.zero,
         child: Container(
           alignment: Alignment.centerLeft,
-          child: const Row(
+          child: Row(
             children: [
               CircleAvatar(
-                backgroundImage: AssetImage('lib/assets/p1.jpg'),
                 radius: 25.0,
+                child: Text(
+                  receiverName
+                      .split(' ')
+                      .map((namePart) => namePart[0].toUpperCase())
+                      .join(''),
+                ),
               ),
-              SizedBox(width: 12.0),
+              const SizedBox(width: 12.0),
               Text(
-                "message",
-                style: TextStyle(color: Colors.black, fontSize: 20.0),
+                receiverName,
+                style: const TextStyle(color: Colors.black, fontSize: 20.0),
               ),
             ],
           ),

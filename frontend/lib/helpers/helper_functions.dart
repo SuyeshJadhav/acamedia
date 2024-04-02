@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperFunctions {
@@ -13,10 +15,17 @@ class HelperFunctions {
     await prefs.setString('userId', id);
   }
 
-  static Future<bool> setUserData(List<String> data) async {
+  static Future<bool> setUserData(Map<String, dynamic> data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('userData', data);
+    String jsonData = jsonEncode(data);
+    await prefs.setString('userData', jsonData);
     return true;
+  }
+
+  static void setChatData(List<Map<String, dynamic>> chatList) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonChatData = jsonEncode(chatList);
+    await prefs.setString('chatList', jsonChatData);
   }
 
 //Get Data------------------------------------------------------------------------------------------------------
@@ -42,30 +51,35 @@ class HelperFunctions {
 
   static Future<Map<String, dynamic>?> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? dataList = prefs.getStringList('userData');
-    if (dataList != null) {
-      List<String> keysList = dataList.map((string) {
-        List<String> parts = string.split(': ');
-        return parts[0];
-      }).toList();
-      List<dynamic> valuesList = dataList.map((string) {
-        List<dynamic> parts = string.split(': ');
-        return parts[1];
-      }).toList();
+    String? jsonData = prefs.getString('userData');
+    if (jsonData != null) {
+      final data = jsonDecode(jsonData);
+      print("Data fetched!");
 
-      Map<String, dynamic> data = {};
-      for (int i = 0; i < keysList.length; i++) {
-        data[keysList[i]] = valuesList[i];
-      }
-
-      print("data fetched!");
       return data;
     } else {
       return null;
     }
   }
 
-  //Remove Data
+  static Future<List<Map<String, dynamic>>?> getChatData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonData = prefs.getString('chatList');
+    if (jsonData != null) {
+      List<dynamic> jsonList = jsonDecode(jsonData);
+
+      // Convert dynamic list to List<Map<String, dynamic>>
+      List<Map<String, dynamic>> dataList =
+          jsonList.map((item) => item as Map<String, dynamic>).toList();
+
+      return dataList;
+    } else {
+      // If JSON string is null, return null
+      return null;
+    }
+  }
+
+  //Remove Data--------------------------------------------------------------------------------------------------
 
   static Future<bool> removeUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

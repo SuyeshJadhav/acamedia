@@ -19,7 +19,12 @@ class ChatTile extends StatelessWidget {
           tileColor: AppColors.darkWhite,
           leading: CircleAvatar(
             radius: 35.0,
-            child: Text(chat.name[0].toUpperCase()),
+            child: Text(
+              chat.name
+                  .split(' ')
+                  .map((namePart) => namePart[0].toUpperCase())
+                  .join(''),
+            ),
           ),
           title: Text(chat.name),
           subtitle: Text(chat.recentMessage),
@@ -28,8 +33,12 @@ class ChatTile extends StatelessWidget {
               : null,
           onTap: () {
             // Handle navigation to chat screen
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ChatPage()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ChatPage(
+                          receiverName: chat.name,
+                        )));
           },
         ),
       ),

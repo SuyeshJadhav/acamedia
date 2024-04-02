@@ -35,6 +35,7 @@ class HomePageState extends State<HomePage> {
           user = value;
           name = '${value['fname']} ${value['lname']}';
         });
+        HelperFunctions.getChatData();
       }
     });
   }

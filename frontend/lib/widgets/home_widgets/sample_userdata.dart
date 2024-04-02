@@ -1,8 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/widgets/chat.dart';
 import 'package:frontend/widgets/home_widgets/chat_tile.dart';
-import 'package:http/http.dart' as http;
 
 class Chats extends StatefulWidget {
   const Chats({super.key});
@@ -12,50 +11,54 @@ class Chats extends StatefulWidget {
 }
 
 class _ChatsState extends State<Chats> {
-  List<dynamic> chatList = [];
+  List<Map<String, dynamic>> chatList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchUsers();
+    fetchChats();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView.builder(
-            itemCount: chatList.length,
-            itemBuilder: (context, index) {
-              final chats = chatList[index];
-              final String email = chats['email'];
-              const recentMessage = 'Hey, how are you?';
-              Chat chat = Chat(name: email, recentMessage: recentMessage);
-              // return ListTile(
-              //   leading: CircleAvatar(
-              //       child: Padding(
-              //     padding: const EdgeInsets.only(bottom: 5),
-              //     child: Text(email[0]),
-              //   )),
-              //   title: Text(email),
-              //   subtitle: Text(recentMessage),
-              // );
-              return ChatTile(chat: chat);
-            }));
+      body: chatList.isEmpty
+          ? const Center(
+              child: CircularProgressIndicator()) // Placeholder for loading
+          : ListView.builder(
+              itemCount: chatList.length,
+              itemBuilder: (context, index) {
+                Map<String, dynamic> chatData = chatList[index];
+                final String name = chatData['name'];
+                final String recentMessage = chatData['recentMessage'];
+                Chat chat = Chat(name: name, recentMessage: recentMessage);
+                return ChatTile(chat: chat);
+              },
+            ),
+      // return ListTile(
+      //   leading: CircleAvatar(
+      //       child: Padding(
+      //     padding: const EdgeInsets.only(bottom: 5),
+      //     child: Text(name[0]),
+      //   )),
+      //   title: Text(email),
+      //   subtitle: Text(recentMessage),
+      // );
+      //   return ChatTile(chat: chat);
+      // })
+    );
   }
 
-  void fetchUsers() async {
-    const uri = 'https://randomuser.me/api/?results=10';
-    final url = Uri.parse(uri);
-    final res = await http.get(url);
-    final body = res.body;
-    final json = jsonDecode(body);
-
-    setState(() {
-      chatList = json['results'];
-    });
-
-    print("Users fetched");
+  void fetchChats() async {
+    await HelperFunctions.getChatData().then((value) => {
+          if (value != null)
+            {
+              setState(() {
+                chatList = value;
+              })
+            }
+        });
   }
 }
 

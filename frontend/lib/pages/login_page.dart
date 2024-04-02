@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/pages/forgot_pass.dart';
 import 'package:frontend/pages/home_page.dart';
+import 'package:frontend/services/chat_service.dart';
 import 'package:frontend/services/user_service.dart';
 import '../services/auth_service.dart';
 
@@ -147,7 +148,13 @@ class _LoginPageState extends State<LoginPage> {
                     if (data != null)
                       {
                         await HelperFunctions.setUserData(data),
-                        _pageRoute(value),
+                        await ChatService.fetchOtherUsers().then((chatList) => {
+                              if (chatList != null)
+                                {
+                                  HelperFunctions.setChatData(chatList),
+                                  _pageRoute(value),
+                                }
+                            })
                       }
                   }),
             }
