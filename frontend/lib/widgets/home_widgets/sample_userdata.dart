@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/chat.dart';
+import 'package:frontend/widgets/home_widgets/chat_tile.dart';
 import 'package:http/http.dart' as http;
 
 class Chats extends StatefulWidget {
@@ -25,18 +27,20 @@ class _ChatsState extends State<Chats> {
         body: ListView.builder(
             itemCount: chatList.length,
             itemBuilder: (context, index) {
-              final chat = chatList[index];
-              final email = chat['email'];
+              final chats = chatList[index];
+              final String email = chats['email'];
               const recentMessage = 'Hey, how are you?';
-              return ListTile(
-                leading: CircleAvatar(
-                    child: Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: Text(email[0]),
-                )),
-                title: Text(email),
-                subtitle: Text(recentMessage),
-              );
+              Chat chat = Chat(name: email, recentMessage: recentMessage);
+              // return ListTile(
+              //   leading: CircleAvatar(
+              //       child: Padding(
+              //     padding: const EdgeInsets.only(bottom: 5),
+              //     child: Text(email[0]),
+              //   )),
+              //   title: Text(email),
+              //   subtitle: Text(recentMessage),
+              // );
+              return ChatTile(chat: chat);
             }));
   }
 

@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class userService {
   static Future<List<String>?> fetchUserData(String userId) async {
     final uri, url;
-    uri = 'http://10.0.2.2:8000/api/user/get-data/Ip71HezCXgY3to3JhKAj';
+    uri = 'http://10.0.2.2:8000/api/user/get-data/${userId}';
     url = Uri.parse(uri);
 
     try {

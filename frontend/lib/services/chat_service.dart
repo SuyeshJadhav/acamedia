@@ -1,0 +1,3 @@
+class ChatService {
+  static fetchAllChat() {}
+}

@@ -18,8 +18,8 @@ class ChatTile extends StatelessWidget {
         child: ListTile(
           tileColor: AppColors.darkWhite,
           leading: CircleAvatar(
-            backgroundImage: AssetImage(chat.imageUrl),
             radius: 35.0,
+            child: Text(chat.name[0].toUpperCase()),
           ),
           title: Text(chat.name),
           subtitle: Text(chat.recentMessage),
