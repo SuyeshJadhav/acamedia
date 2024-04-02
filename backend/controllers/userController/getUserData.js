@@ -1,42 +1,25 @@
 const { firestoreDB } = require("../../utils/firebaseConfig");
-const { usersCollectionName } = require("../../utils/variableNames");
+const { collectionNames, statusCodes } = require("../../utils/variableNames");
 
 /*********************************************************
                     Get User Data
 *********************************************************/
-const getUserData = async (email, userId) => {
-  // strictly only one of email or user id
-  if (email && userId)
-    return {
-      message: "Unauthorized access to fetch data",
-      status: 403
-    };
-  else if (!email && !userId)
-    return { message: "Insufficient parameters", status: 400 };
-
-  const result = email
-    ? await getUserDataByEmail(email)
-    : await getUserDataById(userId);
-
+const getUserData = async userId => {
+  const user = await getUserDataById(userId);
   // check if user exists
-  if (result.status === 500)
+  if (user.status === statusCodes.SERVER_ERROR)
     return {
       message: `Error getting user data`,
       status: 500
     };
-  else if (result.status === 404)
+  else if (user.status === statusCodes.USER_NOT_FOUND)
     return {
       message: `Couldn't find user with given ${email ? "email" : "ID"}`,
       status: 404
     };
-    
-  const userData = result.userData;
+  const userData = user.userData;
 
   // delete data that is not required
-  if (email) {
-    delete userData.email;
-    delete userData.chats;
-  }
   delete userData.password;
   delete userData.timeStamp;
 
@@ -44,35 +27,19 @@ const getUserData = async (email, userId) => {
 };
 
 /*********************************************************
-                  Get User Data by Email
-*********************************************************/
-const getUserDataByEmail = async email => {
-  const userCollectionRef = firestoreDB.collection(usersCollectionName);
-  const query = userCollectionRef.where("email", "==", email);
-
-  try {
-    const userDocList = await query.get();
-    if (userDocList.docs.length <= 0) return { result: false, status: 404 };
-    return { userData: userDocList.docs[0].data(), status: 200 };
-  } catch (error) {
-    console.log(`Error fetching user data:- \n${error}`);
-    return { status: 500 };
-  }
-};
-
-/*********************************************************
                   Get User Data by Id
 *********************************************************/
 const getUserDataById = async userId => {
-  const userRef = firestoreDB.collection(usersCollectionName).doc(userId);
+  const userRef = firestoreDB.collection(collectionNames.USERS).doc(userId);
 
   try {
     const userDoc = await userRef.get();
-    if (!userDoc.exists) return { result: false, status: 404 };
-    return { userData: userDoc.data(), status: 200 };
+    if (!userDoc.exists)
+      return { result: false, status: statusCodes.USER_NOT_FOUND };
+    return { userData: userDoc.data(), status: statusCodes.USER_FOUND };
   } catch (error) {
     console.log(`Error fetching user data :- \n${error}`);
-    return { status: 500 };
+    return { status: statusCodes.SERVER_ERROR };
   }
 };
 

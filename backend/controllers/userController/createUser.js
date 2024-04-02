@@ -1,5 +1,5 @@
 const { firestoreDB } = require("../../utils/firebaseConfig");
-const { usersCollectionName } = require("../../utils/variableNames");
+const { collectionNames, statusCodes } = require("../../utils/variableNames");
 const { getTimeStamp } = require("../../utils/generalHelperFunctions");
 const {
   hashPassword,
@@ -15,13 +15,13 @@ const createUser = async user => {
 
   // check if user already exists with same email
   const userExists = await getUserIdByEmail(email);
-  if (userExists.status === 500)
+  if (userExists.status === statusCodes.SERVER_ERROR)
     return {
       message: `Error checking for user`,
       status: 500,
       return: false
     };
-  else if (userExists.status === 200)
+  else if (userExists.status === statusCodes.USER_FOUND)
     return {
       message: `User already exists with email ${email}`,
       status: 200,
@@ -32,13 +32,13 @@ const createUser = async user => {
   if (role.toLowerCase() === "student") {
     const rollNoExists = await getUserIdByRollNo(user.rollno);
 
-    if (rollNoExists.status === 500)
+    if (rollNoExists.status === statusCodes.SERVER_ERROR)
       return {
         message: `Error checking for student`,
         status: 500,
         return: false
       };
-    else if (rollNoExists.status === 200)
+    else if (rollNoExists.status === statusCodes.USER_FOUND)
       return {
         message: `Student already exists with roll no. ${user.rollno}`,
         status: 200,
@@ -48,7 +48,7 @@ const createUser = async user => {
 
   // hash password
   const hashedPassword = await hashPassword(password);
-  if (!hashedPassword.result) {
+  if (!hashedPassword) {
     return { message: `Unable to create new user`, status: 500, result: false };
   }
 
@@ -69,7 +69,7 @@ const createUser = async user => {
   }
 
   try {
-    const userCollectionRef = firestoreDB.collection(usersCollectionName);
+    const userCollectionRef = firestoreDB.collection(collectionNames.USERS);
     const newUserDoc = await userCollectionRef.add(newUser);
     const newUserId = newUserDoc.id;
     return {

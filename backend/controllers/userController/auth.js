@@ -1,42 +1,57 @@
 const bcrypt = require("bcryptjs");
 const { firestoreDB } = require("../../utils/firebaseConfig");
-const { usersCollectionName } = require("../../utils/variableNames");
-const { getUserIdB, getUserIdByEmail } = require("./userHelperFunctions");
+const { collectionNames, statusCodes } = require("../../utils/variableNames");
+const { getUserIdByEmail } = require("./userHelperFunctions");
+const { getUserDataById } = require("./getUserData");
 
-//----------------------------- login --------------------------------
+/*********************************************************
+                     Login User
+*********************************************************/
 const login = async (email, password) => {
   const userId = await getUserIdByEmail(email);
-  // const userId = await checkUserInIndex(email);
-  // check if user exists
-  if (userId === false || userId === "NoUser") {
-    return { message: `Unable to find user with email ${email}.`, status: `UserLoginFail` };
-  }
+  if (userId.status === statusCodes.SERVER_ERROR)
+    return {
+      message: `Error authorizing user`,
+      status: 500
+    };
+  else if (userId.status === statusCodes.USER_NOT_FOUND)
+    return {
+      message: `User with ${email} doesn't exist`,
+      status: 404
+    };
 
   // get user data
-  const userRef = firestoreDB.collection(usersCollectionName).doc(userId);
-  let userDoc;
-  try {
-    userDoc = await userRef.get();
-    if (!userDoc.exists) {
-      return { message: `Unable to fetch user data.`, status: `UserLoginFail` };
-    }
-  } catch (error) {
-    console.log(`Error fetching user data :- ${error.message}`);
-    return { message: `Unable to fetch user data.`, status: `UserLoginFail` };
-  }
+  const user = await getUserDataById(userId.result);
+  if (userId.status === statusCodes.SERVER_ERROR)
+    return {
+      message: `Error authorizing user`,
+      status: 500
+    };
+  else if (userId.status === statusCodes.USER_NOT_FOUND)
+    return {
+      message: `Unable to fetch user data`,
+      status: 404
+    };
+  const userData = user.userData;
+  console.log(userData);
 
   // check if password matches
   try {
-    const savedPassword = userDoc.data().password;
+    const savedPassword = userData.password;
     const passwordsMatch = await bcrypt.compare(password, savedPassword);
-    if (!passwordsMatch) {
-      return { message: "Wrong password.", status: "UserLoginFail" }
-    }
+    if (!passwordsMatch) return { message: "Wrong password", status: 403 };
   } catch (error) {
-    console.log(`Error checking password :- ${error.message}`);
+    console.log(`Error checking password :- \n${error.message}`);
+    return {
+      message: `Error authorizing user`,
+      status: 500
+    };
   }
-  return { userId: userDoc.id, message: `User login successful`, status: "UserLoginSuccess" };
-}
+  return {
+    userId: userId.result,
+    message: `User login successful`,
+    status: 200
+  };
+};
 
-
-module.exports = { login }
+module.exports = { login };

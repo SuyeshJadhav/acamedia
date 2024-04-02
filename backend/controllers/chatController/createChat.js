@@ -1,92 +1,88 @@
-const { firestoreDB } = require("../../utils/firebaseConfig"),
-  { chatsCollectionName, usersCollectionName } = require("../../utils/variableNames"),
-  admin = require("firebase-admin");
+const { firestoreDB } = require("../../utils/firebaseConfig");
+const { collectionNames, statusCodes } = require("../../utils/variableNames");
+const { getUserDataById } = require("../userController/getUserData");
+const { addChatToUser, getChatId } = require("./chatHelperFunction");
 
+/*********************************************************
+                    Create Chat
+*********************************************************/
 const createChat = async (user1Id, user2Id) => {
   //make sure that user1 and user2 actually exist
-  try {
-    const user1Exists = await checkUser(user1Id);
-    const user2Exists = await checkUser(user2Id);
-    if (!user1Exists) {
-      return {
-        message: `User with ID ${user1Id} doesn't exist.`,
-        status: "UserAbsence",
-      };
-    }
-    if (!user2Exists) {
-      return {
-        message: `User with ID ${user2Id} doesn't exist.`,
-        status: "UserAbsence",
-      };
-    }
-  } catch (error) {
-    console.error(`Error checking users :- ${error.message}`);
+  const user1Exists = await getUserDataById(user1Id);
+  const user2Exists = await getUserDataById(user2Id);
+  if (
+    user1Exists.status === statusCodes.SERVER_ERROR ||
+    user2Exists.status === statusCodes.SERVER_ERROR
+  )
     return {
-      message: `Unable to check user existence.`,
-      status: "UserCheckError",
+      message: `Error creating new chat between ${user1Id} and ${user2Id}`,
+      status: 500
     };
-  }
+  else if (user1Exists.status === statusCodes.USER_NOT_FOUND)
+    return {
+      message: `User with ID ${user1Id} doesn't exist.`,
+      status: 404
+    };
+  else if (user2Exists.status === statusCodes.USER_NOT_FOUND)
+    return {
+      message: `User with ID ${user2Id} doesn't exist.`,
+      status: 404
+    };
 
-  let chatId = "";
+  const existingChat = getChatId(user1Id, user2Id);
+
+  if (existingChat.status === collectionNames.CHAT_FOUND)
+    return {
+      message: `Chat between ${user1Id} and ${user2Id} exists already`,
+      status: 200
+    };
+  else if (existingChat.status === collectionNames.SERVER_ERROR)
+    return {
+      message: "Error creating new chat",
+      status: 500
+    };
+
+  let chatId;
+
   //create new chat and add the user1 and user2 as members
   try {
-    const chatCollectionRef = firestoreDB.collection(chatsCollectionName);
+    const user1Ref = firestoreDB.collection(collectionNames.USERS).doc(user1Id);
+    const user2Ref = firestoreDB.collection(collectionNames.USERS).doc(user2Id);
+
+    const chatCollectionRef = firestoreDB.collection(collectionNames.CHATS);
     const chatDoc = await chatCollectionRef.add({
-      users: { user1Id, user2Id },
-      messages: [],
+      users: [user1Ref, user2Ref],
+      messages: []
     });
     chatId = chatDoc.id;
   } catch (error) {
-    console.error(`Error creating new chat :- ${error.message}`);
+    console.error(`Error creating new chat :- \n${error.message}`);
     return {
-      message: `Unable to create new chat for ${user1Id} and ${user2Id}.`,
-      status: "ChatCreationError",
+      message: `Unable to create new chat for ${user1Id} and ${user2Id}`,
+      status: 500
     };
   }
 
   //add chat to user1 and user2 chats array
   const chatAddedToUser1 = await addChatToUser(chatId, user1Id);
-  if (!chatAddedToUser1) {
+  if (!chatAddedToUser1)
     return {
-      message: `Unable to add chat ${chatId} to user ${user1Id}.`,
-      status: "ChatAdditionError",
+      message: `Error creating new chat`,
+      status: 500
     };
-  }
   const chatAddedToUser2 = await addChatToUser(chatId, user2Id);
   if (!chatAddedToUser2) {
     return {
-      message: `Unable to add chat ${chatId} to user ${user1Id}.`,
-      status: "ChatAdditionError",
+      message: `Error creating new chat`,
+      status: 500
     };
   }
 
   return {
     chatId,
-    message: `Added chat ${chatId} to users ${user1Id} and ${user2Id}.`,
-    status: "ChatCreationSuccess",
+    message: `Added chat ${chatId} to users ${user1Id} and ${user2Id}`,
+    status: 200
   };
-};
-
-//checks if user exists in the "users" collection
-const checkUser = async (userId) => {
-  const userRef = firestoreDB.collection(usersCollectionName).doc(userId);
-  const userDoc = await userRef.get();
-  if (userDoc.exists) return true;
-  else return false;
-};
-
-//adds new chat to user's chats array
-const addChatToUser = async (chatId, userId) => {
-  const userRef = firestoreDB.collection(usersCollectionName).doc(userId);
-  try {
-    await userRef.update({
-      chats: admin.firestore.FieldValue.arrayUnion(chatId),
-    });
-  } catch (error) {
-    console.error(`Error adding chatId to user ${userId} :- ${error.message}`);
-    return false;
-  }
-  return true;
 };
 
 module.exports = createChat;

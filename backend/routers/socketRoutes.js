@@ -5,7 +5,9 @@ const path = require("path");
 const {
   getUserDataById
 } = require("../controllers/userController/userHelperFunctions");
-const { getChatId } = require("../controllers/chatController/chatHelperFunction");
+const {
+  getChatId
+} = require("../controllers/chatController/chatHelperFunction");
 const initiateServer = require("../socket/main");
 
 router.get("/", (req, res) => {
