@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/login_page.dart';
 import 'package:frontend/util/colors.dart';
 
 void main() async {
-  runApp(const MainApp());
+  runApp(const ProviderScope(
+    child: MainApp(),
+  ));
 }
 
 class MainApp extends StatefulWidget {
