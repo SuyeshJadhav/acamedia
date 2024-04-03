@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/util/colors.dart';
 
-const List<String> roles = ['Student', 'Teacher'];
-const List<String> branch = ['COMPS', 'IT', 'MECH', 'ETRX'];
+const List<String> roles = ['Student', 'Teacher', 'None'];
+const List<String> branch = ['COMPS', 'IT', 'MECH', 'ETRX', 'None'];
 
 class FilterButton extends StatefulWidget {
   const FilterButton({super.key});
@@ -12,8 +12,8 @@ class FilterButton extends StatefulWidget {
 }
 
 class _FilterButtonState extends State<FilterButton> {
-  String roleValue = roles.first;
-  String branchValue = branch.first;
+  String roleValue = 'None';
+  String branchValue = 'None';
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +76,7 @@ class _FilterDialogState extends State<FilterDialog> {
     return AlertDialog(
       backgroundColor: AppColors.blueGreen,
       insetPadding: const EdgeInsets.only(bottom: 50.0),
-      contentPadding:
-          const EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+      contentPadding: const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
       title: const Text(
         'Select Filters',
         style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
@@ -94,6 +93,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   selectedRole = newValue!;
                 });
               },
+              hint: const Text("Select a Role"),
               underline: Container(
                 height: 2,
                 color: AppColors.darkGreen, // Change underline color here
@@ -101,11 +101,14 @@ class _FilterDialogState extends State<FilterDialog> {
               items: roles.map((value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child: Text(
+                    value,
+                    style: const TextStyle(fontWeight: FontWeight.normal),
+                  ),
                 );
               }).toList(),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
             const Text('Branch'),
             DropdownButton<String>(
               value: selectedBranch,
@@ -114,6 +117,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   selectedBranch = newValue!;
                 });
               },
+              hint: const Text("Select a branch"),
               underline: Container(
                 height: 2,
                 color: AppColors.darkGreen, // Change underline color here
@@ -121,7 +125,10 @@ class _FilterDialogState extends State<FilterDialog> {
               items: branch.map((value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child: Text(
+                    value,
+                    style: const TextStyle(fontWeight: FontWeight.normal),
+                  ),
                 );
               }).toList(),
             ),
@@ -129,25 +136,42 @@ class _FilterDialogState extends State<FilterDialog> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text(
-            'Cancel',
-            style: TextStyle(color: Color.fromRGBO(203, 0, 0, 1)),
-          ),
-        ),
-        TextButton(
-          onPressed: () {
-            widget.onSelectionChanged(selectedRole, selectedBranch);
-            Navigator.pop(context);
-          },
-          child: const Text(
-            'Apply',
-            style: TextStyle(color: Color.fromRGBO(0, 71, 171, 1)),
-          ),
-        ),
+        Row(
+          children: [
+            TextButton(
+                onPressed: (() {
+                  setState(() {
+                    selectedRole = 'None';
+                    selectedBranch = 'None';
+                  });
+                }),
+                child: const Text('Reset')),
+            const SizedBox(width: 35.0),
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: Color.fromRGBO(203, 0, 0, 1)),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    widget.onSelectionChanged(selectedRole, selectedBranch);
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Apply',
+                    style: TextStyle(color: Color.fromRGBO(0, 71, 171, 1)),
+                  ),
+                ),
+              ],
+            )
+          ],
+        )
       ],
     );
   }
