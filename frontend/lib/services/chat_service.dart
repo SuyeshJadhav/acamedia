@@ -27,7 +27,7 @@ class ChatService {
   }
 
   static Future<List<Map<String, dynamic>>?> fetchOtherUsers() async {
-    String user2Id = '';
+    String user2Id = '', chatId = '';
     List<dynamic> chats = [], chatIdList = [], messageList = [];
     Map<String, dynamic> chatInfo = {}, recentMessage = {};
     List<Map<String, dynamic>> chatList = [];
@@ -37,51 +37,77 @@ class ChatService {
               chats = value['chats'],
               for (int i = 0; i < chats.length; i++)
                 {
-                  await ChatService._fetchChatData(chats[i])
-                      .then((chatData) async => {
-                            if (chatData != null)
-                              {
-                                user2Id = chatData['otherUser'],
-                                messageList = chatData['messageList'],
-                                messageList.sort((a, b) {
-                                  String timeStampA = a['timeStamp'];
-                                  String timeStampB = b['timeStamp'];
-                                  DateTime? dateTimeA =
-                                      tryParseDateTime(timeStampA);
-                                  DateTime? dateTimeB =
-                                      tryParseDateTime(timeStampB);
+                  await _fetchChatData(chats[i]).then((chatData) async => {
+                        if (chatData != null)
+                          {
+                            chatId = chats[i],
+                            user2Id = chatData['otherUser'],
+                            messageList = chatData['messageList'],
+                            messageList.sort((a, b) {
+                              String timeStampA = b['timeStamp'];
+                              String timeStampB = a['timeStamp'];
+                              DateTime? dateTimeA =
+                                  tryParseDateTime(timeStampA);
+                              DateTime? dateTimeB =
+                                  tryParseDateTime(timeStampB);
 
-                                  if (dateTimeA != null && dateTimeB != null) {
-                                    return dateTimeA.compareTo(dateTimeB);
-                                  } else {
-                                    return 0;
-                                  }
-                                }),
-                                chatInfo = {},
-                                chatIdList.add(user2Id),
-                                chatInfo['id'] = user2Id,
-                                recentMessage = messageList.last,
-                                chatInfo['recentMessage'] =
-                                    recentMessage['message']['text'],
-                                await userService
-                                    .fetchUserData(user2Id)
-                                    .then((userData) => {
-                                          if (userData != null)
-                                            {
-                                              chatInfo['name'] =
-                                                  userData['fname'] +
-                                                      ' ' +
-                                                      userData['lname'],
-                                            }
-                                        }),
-                                chatList.add(chatInfo)
+                              if (dateTimeA != null && dateTimeB != null) {
+                                return dateTimeA.compareTo(dateTimeB);
+                              } else {
+                                return 0;
                               }
-                          })
+                            }),
+                            chatInfo = {},
+                            chatIdList.add(user2Id),
+                            chatInfo['receiverId'] = user2Id,
+                            chatInfo['chatId'] = chatId,
+                            recentMessage = messageList[0],
+                            chatInfo['recentMessage'] =
+                                recentMessage['message']['text'],
+                            await userService
+                                .fetchUserData(user2Id)
+                                .then((userData) => {
+                                      if (userData != null)
+                                        {
+                                          chatInfo['name'] = userData['fname'] +
+                                              ' ' +
+                                              userData['lname'],
+                                        }
+                                    }),
+                            chatList.add(chatInfo)
+                          }
+                      })
                 },
-              print("list: $chatList"),
+              // print("list: $chatList"),
             }
         });
     return chatList;
+  }
+
+  static Future<List<dynamic>?> fetchMessageList(chatId) async {
+    List<dynamic> messageList = [];
+    final chatData = await _fetchChatData(chatId);
+    if (chatData != null) {
+      if (chatData['messageList'] != null) {
+        messageList = chatData['messageList'];
+        messageList.sort((a, b) {
+          String timeStampA = b['timeStamp'];
+          String timeStampB = a['timeStamp'];
+          DateTime? dateTimeA = tryParseDateTime(timeStampA);
+          DateTime? dateTimeB = tryParseDateTime(timeStampB);
+
+          if (dateTimeA != null && dateTimeB != null) {
+            return dateTimeA.compareTo(dateTimeB);
+          } else {
+            return 0;
+          }
+        });
+      }
+      // print(messageList);
+      return messageList;
+    } else {
+      return null;
+    }
   }
 
   static DateTime? tryParseDateTime(String timestamp) {

@@ -31,8 +31,14 @@ class _ChatsState extends State<Chats> {
               itemBuilder: (context, index) {
                 Map<String, dynamic> chatData = chatList[index];
                 final String name = chatData['name'];
+                final String receiverId = chatData['receiverId'];
+                final String chatId = chatData['chatId'];
                 final String recentMessage = chatData['recentMessage'];
-                Chat chat = Chat(name: name, recentMessage: recentMessage);
+                Chat chat = Chat(
+                    name: name,
+                    recentMessage: recentMessage,
+                    receiverId: receiverId,
+                    chatId: chatId);
                 return ChatTile(chat: chat);
               },
             ),

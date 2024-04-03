@@ -1,12 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/chat_service.dart';
 import 'package:frontend/util/colors.dart';
 import '../widgets/message_widgets/message_list.dart';
-import '../widgets/message_widgets/message_widget.dart';
 import '../widgets/message_widgets/text_input_field.dart';
 
-class ChatPage extends StatelessWidget {
-  final String receiverName;
-  const ChatPage({super.key, required this.receiverName});
+class ChatPage extends StatefulWidget {
+  final String receiverName, receiverId, chatId;
+  const ChatPage(
+      {super.key,
+      required this.receiverName,
+      required this.receiverId,
+      required this.chatId});
+
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  List<dynamic> messageList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchMessages();
+  }
+
+  fetchMessages() async {
+    await ChatService.fetchMessageList(widget.chatId).then((value) => {
+          if (value != null)
+            {
+              setState(() {
+                messageList = value;
+              })
+            }
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,49 +44,49 @@ class ChatPage extends StatelessWidget {
       body: Container(
         color: AppColors.lightWhite,
         // color: Colors.black,
-        child: const Column(
+        child: Column(
           children: [
             Expanded(
-              child: MessageList(
-                messages: [
-                  MessageWidget(
-                    sender: 'Sender1',
-                    message:
-                        'Hello my name is name Hello my name is name Hello my name is namer',
-                    timestamp: 'timestamp',
+              child: MessageList(messages: messageList
+                  // [
+                  //   MessageWidget(
+                  //     sender: 'Sender1',
+                  //     message:
+                  //         'Hello my name is name Hello my name is name Hello my name is namer',
+                  //     timestamp: 'timestamp',
+                  //   ),
+                  //   MessageWidget(
+                  //     sender: 'Sender2',
+                  //     message: 'Hello my name is name',
+                  //     timestamp: 'timestamp',
+                  //   ),
+                  //   MessageWidget(
+                  //     sender: 'Sender1',
+                  //     message: 'Hello my name is name',
+                  //     timestamp: 'timestamp',
+                  //   ),
+                  //   MessageWidget(
+                  //     sender: 'Sender2',
+                  //     message: 'Hello my name is name',
+                  //     timestamp: 'timestamp',
+                  //   ),
+                  //   MessageWidget(
+                  //     sender: 'Sender1',
+                  //     message: 'Hello my name is name',
+                  //     timestamp: 'timestamp',
+                  //   ),
+                  //   MessageWidget(
+                  //     sender: 'Sender1',
+                  //     message: 'Hello my name is name',
+                  //     timestamp: 'timestamp',
+                  //   ),
+                  //   MessageWidget(
+                  //     sender: 'Sender1',
+                  //     message: 'Hello my name is name',
+                  //     timestamp: 'timestamp',
+                  //   ),
+                  // ],
                   ),
-                  MessageWidget(
-                    sender: 'Sender2',
-                    message: 'Hello my name is name',
-                    timestamp: 'timestamp',
-                  ),
-                  MessageWidget(
-                    sender: 'Sender1',
-                    message: 'Hello my name is name',
-                    timestamp: 'timestamp',
-                  ),
-                  MessageWidget(
-                    sender: 'Sender2',
-                    message: 'Hello my name is name',
-                    timestamp: 'timestamp',
-                  ),
-                  MessageWidget(
-                    sender: 'Sender1',
-                    message: 'Hello my name is name',
-                    timestamp: 'timestamp',
-                  ),
-                  MessageWidget(
-                    sender: 'Sender1',
-                    message: 'Hello my name is name',
-                    timestamp: 'timestamp',
-                  ),
-                  MessageWidget(
-                    sender: 'Sender1',
-                    message: 'Hello my name is name',
-                    timestamp: 'timestamp',
-                  ),
-                ],
-              ),
             ),
             TextInputField(),
           ],
@@ -86,7 +115,7 @@ class ChatPage extends StatelessWidget {
               CircleAvatar(
                 radius: 25.0,
                 child: Text(
-                  receiverName
+                  widget.receiverName
                       .split(' ')
                       .map((namePart) => namePart[0].toUpperCase())
                       .join(''),
@@ -94,7 +123,7 @@ class ChatPage extends StatelessWidget {
               ),
               const SizedBox(width: 12.0),
               Text(
-                receiverName,
+                widget.receiverName,
                 style: const TextStyle(color: Colors.black, fontSize: 20.0),
               ),
             ],

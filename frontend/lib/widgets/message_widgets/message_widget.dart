@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class MessageWidget extends StatelessWidget {
   final String sender;
-  final String message;
-  final String timestamp;
+  final dynamic message;
+  final DateTime? timestamp;
   // final String messageId;
 
   const MessageWidget({
@@ -24,6 +24,10 @@ class MessageWidget extends StatelessWidget {
         sender == 'Sender1' ? CrossAxisAlignment.end : CrossAxisAlignment.start;
     MainAxisAlignment alignTime =
         sender == 'Sender1' ? MainAxisAlignment.end : MainAxisAlignment.start;
+
+    String minutes = timestamp!.minute < 10
+        ? '0${timestamp?.minute}' // Add leading zero if minute is less than 10
+        : '${timestamp?.minute}';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
@@ -64,7 +68,7 @@ class MessageWidget extends StatelessWidget {
             mainAxisAlignment: alignTime,
             children: [
               Text(
-                timestamp, // Display the provided timestamp
+                '${timestamp?.hour}:$minutes', // Display the provided timestamp
                 style: GoogleFonts.roboto(
                     textStyle:
                         TextStyle(color: Colors.grey[850], fontSize: 11)),
