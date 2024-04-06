@@ -32,7 +32,7 @@ class ProfilePageState extends State<ProfilePage> {
                     user['fname'] ?? ''; // Null check for first name
                 String lastName =
                     user['lname'] ?? ''; // Null check for last name
-                name = (firstName + ' ' + lastName)
+                name = ('$firstName $lastName')
                     .toUpperCase(); // Concatenate and convert to uppercase
                 branch = user['branch'] ?? ''; // Null check for branch
                 email = user['email'] ?? ''; // Null check for email
@@ -154,7 +154,9 @@ class ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.3,
+                ),
                 const LogoutBtn()
               ],
             ),

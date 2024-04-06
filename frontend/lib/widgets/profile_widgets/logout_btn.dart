@@ -50,28 +50,36 @@ class _LogoutBtnState extends State<LogoutBtn> {
           );
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(195, 255, 0, 0),
+          // backgroundColor: const Color.fromARGB(195, 255, 0, 0),
+          backgroundColor: Color.fromARGB(255, 255, 200, 196),
           fixedSize: const Size(350, 55),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(10),
             ),
           ),
+          // side: const BorderSide(
+          //   width: 2, // Specify the border thickness
+          //   color: Colors.red, // Specify the border color
+          // ),
         ),
         child: const Row(
           children: [
+            SizedBox(
+              width: 88,
+            ),
             Icon(
               Icons.logout_rounded,
               size: 25,
-              color: Color.fromRGBO(247, 247, 247, 1),
+              color: Colors.red,
             ),
             SizedBox(
-              width: 10,
+              width: 15.0,
             ),
             Text(
               "Logout",
               style: TextStyle(
-                color: Color.fromRGBO(247, 247, 247, 1),
+                color: Colors.red,
                 fontSize: 20,
                 fontWeight: FontWeight.w500,
               ),

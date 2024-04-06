@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/login_page.dart';
@@ -7,22 +8,9 @@ import 'package:socket_io_client/socket_io_client.dart';
 // import 'package:socket_io_client/socket_io_client.dart';
 
 void main() async {
-  // Dart client
-  // IO.Socket socket = IO.io('http://10.0.2.2:8000');
-
-  Socket socket = io(
-      'http://10.0.2.2:8000',
-      OptionBuilder()
-          .setTransports(['websocket']) // for Flutter or Dart VM
-          .disableAutoConnect() // disable auto-connection
-          .setExtraHeaders({'foo': 'bar'}) // optional
-          .build());
-  socket.connect();
-
-  socket.onConnect((_) {
-    print('connect');
-  });
-  runApp(const MainApp());
+  runApp(const ProviderScope(
+    child: MainApp(),
+  ));
 }
 
 class MainApp extends StatefulWidget {
