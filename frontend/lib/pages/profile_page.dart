@@ -75,7 +75,12 @@ class ProfilePageState extends State<ProfilePage> {
                   child: CircleAvatar(
                     radius: 100.0,
                     child: Text(
-                      name.isNotEmpty ? name[0] : '',
+                      name.isNotEmpty
+                          ? name
+                              .split(' ')
+                              .map((namePart) => namePart[0].toUpperCase())
+                              .join('')
+                          : '',
                       style: const TextStyle(
                           fontSize: 45, fontWeight: FontWeight.w900),
                     ),
