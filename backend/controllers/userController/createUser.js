@@ -11,7 +11,7 @@ const {
                     User Creation
 *********************************************************/
 const createUser = async user => {
-  const { fname, lname, email, role, branch, degree, password } = user;
+  const { fname, mname, lname, email, role, branch, degree, password } = user;
 
   // check if user already exists with same email
   const userExists = await getUserIdByEmail(email);
@@ -54,8 +54,9 @@ const createUser = async user => {
 
   // create a new user object to avoid extra data to be added
   const newUser = {
-    fname,
-    lname,
+    fname: fname.trim(),
+    mname: mname.trim(),
+    lname: lname.trim(),
     email,
     role,
     branch,
@@ -69,8 +70,8 @@ const createUser = async user => {
   }
 
   try {
-    const userCollectionRef = firestoreDB.collection(collectionNames.USERS);
-    const newUserDoc = await userCollectionRef.add(newUser);
+    const usersCollectionRef = firestoreDB.collection(collectionNames.USERS);
+    const newUserDoc = await usersCollectionRef.add(newUser);
     const newUserId = newUserDoc.id;
     return {
       userId: newUserId,
