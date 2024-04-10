@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/user_service.dart';
 import '../widgets/search_widgets/filter_button.dart';
 import '../widgets/search_widgets/search_bar.dart';
-import '../widgets/search_widgets/search_results_list.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -12,11 +12,28 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  String query = "";
+  bool _isLoading = false;
+  String oldQuery = "", query = "", role = "none", branch = "none";
+  List<dynamic> results = [];
 
   void onChangedQuery(String newQuery) {
     setState(() {
+      oldQuery = query;
       query = newQuery;
+      _isLoading = true;
+    });
+    getSearchResults(query, role, branch);
+  }
+
+  void setRoleSelected(String newRole) {
+    setState(() {
+      role = newRole;
+    });
+  }
+
+  void setBranchSelected(String newBranch) {
+    setState(() {
+      branch = newBranch;
     });
   }
 
@@ -49,16 +66,55 @@ class _SearchPageState extends State<SearchPage> {
                 Expanded(
                   child: SearchBox(onChangedQuery: onChangedQuery),
                 ),
-                const FilterButton(),
+                FilterButton(
+                  setBranchSelected: setBranchSelected,
+                  setRoleSelected: setRoleSelected,
+                ),
               ],
             ),
             Expanded(
-              child: SearchResultsList(query: query),
-            ),
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ListView.builder(
+                        itemCount: results.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        width: 0.5,
+                                        color: Colors.grey.shade200))),
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: ListTile(
+                                  leading: CircleAvatar(
+                                    radius: 30.0,
+                                    child: Text(
+                                        "${results[index]['fname'][0].toString().toUpperCase()}${results[index]['lname'][0].toString().toUpperCase()}"),
+                                  ),
+                                  title: Text(
+                                      "${results[index]['fname']} ${results[index]['lname']}")),
+                            ),
+                          );
+                        },
+                      ))
           ],
         ),
       ),
     );
+  }
+
+  void getSearchResults(String query, String role, String branch) async {
+    query = query.toLowerCase();
+    final results = await userService.searchUserList(query, role, branch);
+    if (results != null) {
+      setState(() {
+        this.results = results;
+        _isLoading = false;
+      });
+    }
   }
 }
 

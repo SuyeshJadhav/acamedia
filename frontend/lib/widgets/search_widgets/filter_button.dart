@@ -5,7 +5,12 @@ const List<String> roles = ['Student', 'Teacher', 'None'];
 const List<String> branch = ['COMPS', 'IT', 'MECH', 'ETRX', 'None'];
 
 class FilterButton extends StatefulWidget {
-  const FilterButton({super.key});
+  final Function(String) setRoleSelected;
+  final Function(String) setBranchSelected;
+  const FilterButton(
+      {super.key,
+      required this.setRoleSelected,
+      required this.setBranchSelected});
 
   @override
   State<FilterButton> createState() => _FilterButtonState();
@@ -32,6 +37,7 @@ class _FilterButtonState extends State<FilterButton> {
                     roleValue = newRole;
                     branchValue = newBranch;
                   });
+                  widget.setRoleSelected(newRole);
                 },
               );
             },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class SearchBox extends StatelessWidget {
   final ValueChanged<String> onChangedQuery;
@@ -7,6 +8,7 @@ class SearchBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _searchTextController = TextEditingController();
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
@@ -15,11 +17,20 @@ class SearchBox extends StatelessWidget {
             width: 340,
             height: 50,
             child: TextField(
-              onChanged: onChangedQuery,
-              decoration: const InputDecoration(
+              controller: _searchTextController,
+              onSubmitted: onChangedQuery,
+              decoration: InputDecoration(
                 labelText: "Search",
-                border: OutlineInputBorder(),
-                suffixIcon: Icon(Icons.search),
+                border: const OutlineInputBorder(),
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    onChangedQuery(_searchTextController.text);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Icon(Icons.search),
+                  ),
+                ),
               ),
             ),
           ),

@@ -1,33 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/search_page.dart';
+import 'package:frontend/services/user_service.dart';
 
-class SearchResultsList extends StatelessWidget {
-  final String query;
+class SearchResultsList extends StatefulWidget {
+  final String query, role, branch;
 
-  final List<ChatItem> names = [
-    ChatItem(name: "John", tags: ["Math", "Physics", "Engineering"]),
-    ChatItem(name: "Alice", tags: ["Physics", "Chemistry", "Medical"]),
-  ];
+  SearchResultsList(
+      {super.key,
+      required this.query,
+      required this.role,
+      required this.branch});
 
-  SearchResultsList({super.key, required this.query});
+  @override
+  State<SearchResultsList> createState() => _SearchResultsListState();
+}
+
+class _SearchResultsListState extends State<SearchResultsList> {
+  // final List<ChatItem> names = [
+  //   ChatItem(name: "John", tags: ["Math", "Physics", "Engineering"]),
+  //   ChatItem(name: "Alice", tags: ["Physics", "Chemistry", "Medical"]),
+  // ];
+  List<dynamic> results = [];
 
   // Basic search logic
-  List<ChatItem> getSearchResults(String query) {
+  void getSearchResults(String query, role, branch) async {
+    final searchMap = await userService.searchUserList(query, role, branch);
     query = query.toLowerCase();
-    return names.where((item) {
-      return item.name.toLowerCase().contains(query) ||
-          item.tags.any((tag) => tag.toLowerCase().contains(query));
-    }).toList();
+    if (searchMap != null) {
+      setState(() {
+        results = searchMap;
+      });
+    }
+    // return names.where((item) {
+    //   return item.name.toLowerCase().contains(query) ||
+    //       item.tags.any((tag) => tag.toLowerCase().contains(query));
+    // }).toList();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSearchResults(widget.query, widget.role, widget.branch);
+    print(widget.query);
   }
 
   @override
   Widget build(BuildContext context) {
-    final results = getSearchResults(query);
+    // final results = getSearchResults(widget.query);
 
     return ListView.builder(
       itemCount: results.length,
       itemBuilder: (context, index) {
-        return ListTile(title: Text(results[index].name));
+        return ListTile(title: Text(results[index]['fname']));
       },
     );
   }

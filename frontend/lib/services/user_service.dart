@@ -17,4 +17,22 @@ class userService {
       return null;
     }
   }
+
+  static Future<List<dynamic>?> searchUserList(
+      String query, String role, String branch) async {
+    final uri, url;
+    uri =
+        'http://10.0.2.2:8000/api/user/search?text=$query&role=$role&branch=$branch';
+    url = Uri.parse(uri);
+
+    try {
+      final res = await http.get(url);
+      final body = jsonDecode(res.body);
+
+      return body['result'];
+    } catch (e) {
+      print("Error in searching users: $e");
+      return null;
+    }
+  }
 }
