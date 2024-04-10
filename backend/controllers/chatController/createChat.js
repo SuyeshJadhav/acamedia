@@ -24,11 +24,6 @@ const createChat = async (user1Id, user2Id) => {
       message: `User with ID ${user1Id} doesn't exist.`,
       status: 404
     };
-  else if (user2Exists.status === statusCodes.USER_NOT_FOUND)
-    return {
-      message: `User with ID ${user2Id} doesn't exist.`,
-      status: 404
-    };
 
   const existingChat = await getChatId(user1Id, user2Id);
 
@@ -37,7 +32,7 @@ const createChat = async (user1Id, user2Id) => {
       message: `Chat between ${user1Id} and ${user2Id} exists already`,
       status: 400
     };
-  else if (existingChat.status === collectionNames.SERVER_ERROR)
+  else if (existingChat.status === statusCodes.SERVER_ERROR)
     return {
       message: "Error creating new chat",
       status: 500
@@ -47,8 +42,8 @@ const createChat = async (user1Id, user2Id) => {
 
   //create new chat and add the user1 and user2 as members
   try {
-    const chatCollectionRef = firestoreDB.collection(collectionNames.CHATS);
-    const chatDoc = await chatCollectionRef.add({
+    const chatsCollectionRef = firestoreDB.collection(collectionNames.CHATS);
+    const chatDoc = await chatsCollectionRef.add({
       users: [user1Id, user2Id],
       timeStamp: getTimeStamp()
     });

@@ -3,7 +3,7 @@ const { collectionNames } = require("../../utils/variableNames");
 
 const getChatData = async (chatId, userId) => {
   const chatRef = firestoreDB.collection(collectionNames.CHATS).doc(chatId);
-  const messageCollectionRef = chatRef.collection(collectionNames.MESSAGES);
+  const messagesCollectionRef = chatRef.collection(collectionNames.MESSAGES);
 
   try {
 		// check if chat exists
@@ -19,7 +19,7 @@ const getChatData = async (chatId, userId) => {
     const otherUser = users[0] === userId ? users[1] : users[0];
 
 		// list all messages of the chat
-    const messageDocs = await messageCollectionRef.orderBy("timeStamp").get();
+    const messageDocs = await messagesCollectionRef.orderBy("timeStamp").get();
 
     let messageList = [];
     messageDocs.forEach(message => messageList.push(message.data()));

@@ -6,12 +6,12 @@ const { collectionNames, statusCodes } = require("../../utils/variableNames");
               Get Chat ID from 2 User's Data
 *********************************************************/
 const getChatId = async (user1Id, user2Id) => {
-  const chatCollectionRef = firestoreDB.collection(collectionNames.CHATS);
-  const chatIdQuery1 = chatCollectionRef.where("users", "==", [
+  const chatsCollectionRef = firestoreDB.collection(collectionNames.CHATS);
+  const chatIdQuery1 = chatsCollectionRef.where("users", "==", [
     user1Id,
     user2Id
   ]);
-  const chatIdQuery2 = chatCollectionRef.where("users", "==", [
+  const chatIdQuery2 = chatsCollectionRef.where("users", "==", [
     user2Id,
     user1Id
   ]);
@@ -72,7 +72,6 @@ const checkChatInUser = async (userId, chatId) => {
   try {
     // check if user exists
     const userRef = firestoreDB.collection(collectionNames.USERS).doc(userId);
-    console.log(userId);
     const userDoc = await userRef.get();
     if (!userDoc.exists)
       return { result: false, status: statusCodes.USER_NOT_FOUND };

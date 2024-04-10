@@ -16,7 +16,6 @@ const storeMessage = async (
 ) => {
   // check if user and chat are related
   const chatInUser = await checkChatInUser(senderId, chatId);
-  console.log(chatInUser);
   if (chatInUser.statusCode === statusCodes.SERVER_ERROR)
     return {
       message: "Error sending message",
@@ -37,16 +36,18 @@ const storeMessage = async (
     const result = await checkMessageValidity(message.text, senderRole);
     if (result.status === statusCodes.INAPPROPRIATE_MESSAGE)
       return { message: result.message, status: 403 };
+    else if (result.status === statusCodes.SERVER_ERROR)
+      return {message: "Error sending message", status: 500};
   }
 
   // add new message to message collection, and create if it doesn't exist
   const chatRef = firestoreDB.collection(collectionNames.CHATS).doc(chatId);
-  const messageCollectionRef = chatRef.collection(collectionNames.MESSAGES);
+  const messagesCollectionRef = chatRef.collection(collectionNames.MESSAGES);
 
   // store message in database with timestamp
   try {
     const timeStamp = getTimeStamp();
-    const messageDoc = await messageCollectionRef.add({
+    const messageDoc = await messagesCollectionRef.add({
       sender: senderId,
       message: message,
       timeStamp
