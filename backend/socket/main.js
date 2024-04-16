@@ -1,52 +1,40 @@
 const initiateServer = (io) => {
   io.use((socket, next) => {
-    const id = socket.handshake.auth.id;
+    // For Socket.IO v2.x, authentication data is not available directly in handshake
+    // You may need to pass the id in a different way, such as query parameters or custom headers
+    // Example: const id = socket.handshake.query.id;
+    // Replace 'id' with the key you're using to pass the authentication data
+    const id = socket.handshake.query.id; // Assuming id is passed as a query parameter
     socket.id = id;
     next();
   });
 
   io.on("connection", (socket) => {
-    // console.log(socket.rooms);
-    // console.log(socket.id);
-    // console.log("----------------");
-
     socket.on("join", (roomName) => {
-      // console.log(roomName);
-
-      Array.from(socket.rooms)
-        .filter((it) => it !== socket.id)
-        .forEach((id) => {
-          socket.leave(id);
-          socket.removeAllListeners(`emitMessage`);
+      // Remove listeners and leave rooms when joining a new room
+      Object.keys(socket.rooms)
+        .filter((room) => room !== socket.id)
+        .forEach((room) => {
+          socket.leave(room);
+          socket.removeAllListeners(`emitMessage_${room}`);
         });
 
       socket.join(roomName);
-      // console.log(Array.from(socket.rooms));
 
-      socket.on(`emitMessage`, (message) => {
-        Array.from(socket.rooms)
-          .filter((it) => it !== socket.id)
-          .forEach((id) => {
-            socket.to(id).emit("onMessage", message);
-          });
+      socket.on(`emitMessage_${roomName}`, (message) => {
+        // Emit message to all clients in the room except the sender
+        socket.to(roomName).emit("onMessage", message);
       });
     });
 
-    socket.on("onMessage", (msg) => {
-      // console.log(msg);
-    });
-
-    // socket.on("private message", ({ content, to }) => {
-    //   console.log(to, content);
-    //   socket.to(to).emit("private message", {
-    //     content,
-    //     from: socket.id,
-    //   });
-    // });
-
     socket.on("disconnect", () => {
-      // console.log(socket.id + " ==== diconnected");
-      socket.removeAllListeners();
+      // Remove all listeners when a client disconnects
+      Object.keys(socket.rooms)
+        .filter((room) => room !== socket.id)
+        .forEach((room) => {
+          socket.leave(room);
+          socket.removeAllListeners(`emitMessage_${room}`);
+        });
     });
   });
 };

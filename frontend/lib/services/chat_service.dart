@@ -103,7 +103,7 @@ class ChatService {
           }
         });
       }
-      // print(messageList);
+      print(messageList);
       return messageList;
     } else {
       return null;
@@ -116,6 +116,7 @@ class ChatService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   static DateTime? tryParseDateTime(String timestamp) {
+    print(timestamp);
     try {
       if (timestamp.length != 14) {
         throw const FormatException('Invalid timestamp format');
@@ -131,5 +132,21 @@ class ChatService {
       print('Error parsing timestamp: $e');
       return null;
     }
+  }
+
+  static List<dynamic> sortMessageList(List<dynamic> messageList) {
+    messageList.sort((a, b) {
+      String timeStampA = b['timeStamp'];
+      String timeStampB = a['timeStamp'];
+      DateTime? dateTimeA = tryParseDateTime(timeStampA);
+      DateTime? dateTimeB = tryParseDateTime(timeStampB);
+
+      if (dateTimeA != null && dateTimeB != null) {
+        return dateTimeA.compareTo(dateTimeB);
+      } else {
+        return 0;
+      }
+    });
+    return messageList;
   }
 }

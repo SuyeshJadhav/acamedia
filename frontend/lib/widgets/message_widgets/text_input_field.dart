@@ -1,7 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/helpers/helper_functions.dart';
+import 'package:frontend/util/socket_manager.dart';
 
-class TextInputField extends StatelessWidget {
-  const TextInputField({super.key});
+class TextInputField extends StatefulWidget {
+  final String? chatId, receiverId;
+  final Function(dynamic) updateMessageList;
+  const TextInputField(
+      {super.key,
+      this.chatId,
+      this.receiverId,
+      required this.updateMessageList});
+
+  @override
+  State<TextInputField> createState() => _TextInputFieldState();
+}
+
+class _TextInputFieldState extends State<TextInputField> {
+  String id = '';
+  final _inputController = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserId();
+  }
+
+  getUserId() async {
+    await HelperFunctions.getUserId().then((value) => {
+          if (value != null)
+            {
+              setState(() {
+                id = value;
+              })
+            }
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +53,7 @@ class TextInputField extends StatelessWidget {
           ),
           Expanded(
             child: TextField(
+              controller: _inputController,
               // Your text input field configuration
               decoration: InputDecoration(
                 contentPadding:
@@ -38,11 +72,38 @@ class TextInputField extends StatelessWidget {
             icon: const Icon(Icons.send),
             color: Colors.black, // Change the send button color here
             onPressed: () {
-              // Handle sending the message
+              onSendClick(widget.receiverId, _inputController.text);
             },
           ),
         ],
       ),
     );
+  }
+
+  void onSendClick(String? receiver, String msg) {
+    if (receiver != null) {
+      DateTime currentDate = DateTime.now();
+      String formattedDate =
+          '${currentDate.year}${(currentDate.month).toString().padLeft(2, "0")}${currentDate.day.toString().padLeft(2, "0")}${currentDate.hour.toString().padLeft(2, "0")}${currentDate.minute.toString().padLeft(2, "0")}${currentDate.second.toString().padLeft(2, "0")}';
+      // String formattedTime =
+      print(formattedDate);
+
+      final message = {
+        "message": {
+          "text": msg,
+        },
+        "sender": id,
+        "timeStamp": formattedDate,
+        // "chatID": widget.chatId,
+      };
+
+      setState(() {
+        _inputController.text = '';
+      });
+
+      widget.updateMessageList(message);
+
+      SocketManager.sendMessage(message);
+    }
   }
 }
