@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/message_widgets/snack_bar.dart';
 
-class TextInputField extends StatelessWidget {
+class TextInputField extends StatefulWidget {
   const TextInputField({super.key});
+
+  @override
+  State<TextInputField> createState() => _TextInputFieldState();
+}
+
+class _TextInputFieldState extends State<TextInputField> {
+  final _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +28,7 @@ class TextInputField extends StatelessWidget {
           ),
           Expanded(
             child: TextField(
-              // Your text input field configuration
+              controller: _textEditingController,
               decoration: InputDecoration(
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 0, horizontal: 9),
@@ -39,6 +47,14 @@ class TextInputField extends StatelessWidget {
             color: Colors.black, // Change the send button color here
             onPressed: () {
               // Handle sending the message
+              if (_textEditingController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  snackBarError(context),
+                );
+              } else {
+                // Send the message
+                _textEditingController.clear();
+              }
             },
           ),
         ],

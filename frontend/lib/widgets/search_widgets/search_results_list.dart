@@ -4,11 +4,12 @@ import 'package:frontend/services/user_service.dart';
 class SearchResultsList extends StatefulWidget {
   final String query, role, branch;
 
-  SearchResultsList(
-      {super.key,
-      required this.query,
-      required this.role,
-      required this.branch});
+  const SearchResultsList({
+    super.key,
+    required this.query,
+    required this.role,
+    required this.branch,
+  });
 
   @override
   State<SearchResultsList> createState() => _SearchResultsListState();
@@ -38,10 +39,9 @@ class _SearchResultsListState extends State<SearchResultsList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getSearchResults(widget.query, widget.role, widget.branch);
-    print(widget.query);
+    // print(widget.query);
   }
 
   @override

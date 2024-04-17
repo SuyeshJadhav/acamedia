@@ -110,52 +110,10 @@ class ProfilePageState extends State<ProfilePage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Notification",
-                              style: TextStyle(
-                                color: Color.fromRGBO(38, 45, 37, 1),
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            ToggleSwitch(
-                              minWidth: 40.0,
-                              cornerRadius: 10.0,
-                              minHeight: 35,
-                              activeBgColors: const [
-                                [Color.fromARGB(255, 228, 245, 245)],
-                                [Color.fromARGB(255, 42, 82, 81)]
-                              ],
-                              activeFgColor: Colors.black,
-                              inactiveBgColor: Colors.grey,
-                              inactiveFgColor: Colors.white,
-                              initialLabelIndex: notificationsEnabled ? 0 : 1,
-                              totalSwitches: 2,
-                              icons: const [
-                                Icons.notifications_active,
-                                Icons.notifications_off
-                              ],
-                              iconSize: 24.0,
-                              radiusStyle: true,
-                              onToggle: (index) {
-                                setState(() {
-                                  notificationsEnabled = index == 0;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.35,
                 ),
                 const LogoutBtn()
               ],

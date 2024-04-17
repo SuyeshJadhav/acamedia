@@ -12,7 +12,6 @@ class HomePage extends StatefulWidget {
   // get userId => null;
 
   @override
-  // ignore: library_private_types_in_public_api
   HomePageState createState() => HomePageState();
 }
 
@@ -23,7 +22,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   initState() {
-    // TODO: implement initState
     super.initState();
     fetchUserData();
   }

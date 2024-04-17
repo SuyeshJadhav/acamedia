@@ -27,22 +27,29 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(229, 221, 216, 1),
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(30.0),
             child: SingleChildScrollView(
               child: Form(
                 key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
+                    Image.asset(
+                      'lib/assets/01.png',
+                      height: 250,
+                      width: 250,
+                    ),
                     _buildAcamediaTitle(),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 50),
                     _buildLoginForm(),
                     const SizedBox(height: 20),
                     _buildLoginButton(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     _buildForgotPasswordLink(),
                   ],
                 ),
@@ -57,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildAcamediaTitle() {
     return const Text(
       'Acamedia',
-      style: TextStyle(fontSize: 32),
+      style: TextStyle(fontSize: 25),
     );
   }
 
