@@ -101,9 +101,8 @@ class _TextInputFieldState extends State<TextInputField> {
         _inputController.text = '';
       });
 
-      widget.updateMessageList(message);
-
-      SocketManager.sendMessage(message);
+      SocketManager.sendMessage(message, widget.updateMessageList);
+      // widget.updateMessageList(message);
     }
   }
 }

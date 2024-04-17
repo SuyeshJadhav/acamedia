@@ -4,7 +4,7 @@ import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/login_page.dart';
 import 'package:frontend/util/colors.dart';
-import 'package:socket_io_client/socket_io_client.dart';
+// import 'package:socket_io_client/socket_io_client.dart';
 // import 'package:socket_io_client/socket_io_client.dart';
 
 void main() async {
@@ -27,24 +27,24 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    initializeSocket();
+    // initializeSocket();
     getLoggedInStatus();
   }
 
-  void initializeSocket() {
-    Socket socket = io(
-      'http://10.0.2.2:8000',
-      OptionBuilder()
-          .setTransports(['websocket'])
-          .disableAutoConnect()
-          .setExtraHeaders({'foo': 'bar'})
-          .build(),
-    );
-    socket.connect();
-    socket.onConnect((_) {
-      print('Connected');
-    });
-  }
+  // void initializeSocket() {
+  //   Socket socket = io(
+  //     'http://10.0.2.2:8000',
+  //     OptionBuilder()
+  //         .setTransports(['websocket'])
+  //         .disableAutoConnect()
+  //         .setExtraHeaders({'foo': 'bar'})
+  //         .build(),
+  //   );
+  //   socket.connect();
+  //   socket.onConnect((_) {
+  //     print('Connected');
+  //   });
+  // }
 
   void getLoggedInStatus() async {
     await HelperFunctions.getLoggedInStatus().then((value) => {

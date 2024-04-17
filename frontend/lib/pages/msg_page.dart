@@ -26,7 +26,7 @@ class _ChatPageState extends State<ChatPage> {
     // TODO: implement initState
     super.initState();
     fetchMessages();
-    SocketManager.initSocket(widget.chatId);
+    SocketManager.initSocket(widget.chatId, updateMessageList);
     SocketManager.receiveMessage();
   }
 
