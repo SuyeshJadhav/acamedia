@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/services/chat_service.dart';
 import 'package:frontend/util/colors.dart';
-import 'package:socket_io_client/socket_io_client.dart';
+import 'package:frontend/util/socket_manager.dart';
+// import 'package:socket_io_client/socket_io_client.dart';
 import '../widgets/message_widgets/message_list.dart';
 import '../widgets/message_widgets/text_input_field.dart';
 
@@ -25,7 +26,8 @@ class _ChatPageState extends State<ChatPage> {
     // TODO: implement initState
     super.initState();
     fetchMessages();
-    connectSocket();
+    SocketManager.initSocket(widget.chatId);
+    SocketManager.receiveMessage();
   }
 
   fetchMessages() async {
@@ -39,16 +41,11 @@ class _ChatPageState extends State<ChatPage> {
         });
   }
 
-  void connectSocket() {
-    Socket socket = io('http://10.0.2.2:8000', <String, dynamic>{
-      "transports": ['websocket'],
-      "autoConnect": false,
+  updateMessageList(dynamic Message) {
+    setState(() {
+      messageList.add(Message);
+      ChatService.sortMessageList(messageList);
     });
-
-    socket.connect();
-    print(socket.connected);
-    socket.onConnectError((data) => print(data));
-    socket.onConnect((data) => print("Connected"));
   }
 
   @override
@@ -102,7 +99,11 @@ class _ChatPageState extends State<ChatPage> {
                   // ],
                   ),
             ),
-            TextInputField(),
+            TextInputField(
+              chatId: widget.chatId,
+              receiverId: widget.receiverId,
+              updateMessageList: updateMessageList,
+            ),
           ],
         ),
       ),

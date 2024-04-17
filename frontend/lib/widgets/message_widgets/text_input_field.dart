@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/helpers/helper_functions.dart';
+import 'package:frontend/util/socket_manager.dart';
 import 'package:frontend/widgets/message_widgets/snack_bar.dart';
 
 class TextInputField extends StatefulWidget {
-  const TextInputField({super.key});
+  final String? chatId, receiverId;
+  final Function(dynamic) updateMessageList;
+  const TextInputField(
+      {super.key,
+      this.chatId,
+      this.receiverId,
+      required this.updateMessageList});
 
   @override
   State<TextInputField> createState() => _TextInputFieldState();
@@ -10,6 +18,25 @@ class TextInputField extends StatefulWidget {
 
 class _TextInputFieldState extends State<TextInputField> {
   final _textEditingController = TextEditingController();
+  String id = '';
+  final _inputController = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserId();
+  }
+
+  getUserId() async {
+    await HelperFunctions.getUserId().then((value) => {
+          if (value != null)
+            {
+              setState(() {
+                id = value;
+              })
+            }
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +55,8 @@ class _TextInputFieldState extends State<TextInputField> {
           ),
           Expanded(
             child: TextField(
-              controller: _textEditingController,
+              controller: _inputController,
+              // Your text input field configuration
               decoration: InputDecoration(
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 0, horizontal: 9),
@@ -46,7 +74,7 @@ class _TextInputFieldState extends State<TextInputField> {
             icon: const Icon(Icons.send),
             color: Colors.black, // Change the send button color here
             onPressed: () {
-              // Handle sending the message
+              onSendClick(widget.receiverId, _inputController.text);
               if (_textEditingController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   snackBarError(context),
@@ -60,5 +88,32 @@ class _TextInputFieldState extends State<TextInputField> {
         ],
       ),
     );
+  }
+
+  void onSendClick(String? receiver, String msg) {
+    if (receiver != null) {
+      DateTime currentDate = DateTime.now();
+      String formattedDate =
+          '${currentDate.year}${(currentDate.month).toString().padLeft(2, "0")}${currentDate.day.toString().padLeft(2, "0")}${currentDate.hour.toString().padLeft(2, "0")}${currentDate.minute.toString().padLeft(2, "0")}${currentDate.second.toString().padLeft(2, "0")}';
+      // String formattedTime =
+      print(formattedDate);
+
+      final message = {
+        "message": {
+          "text": msg,
+        },
+        "sender": id,
+        "timeStamp": formattedDate,
+        // "chatID": widget.chatId,
+      };
+
+      setState(() {
+        _inputController.text = '';
+      });
+
+      widget.updateMessageList(message);
+
+      SocketManager.sendMessage(message);
+    }
   }
 }
