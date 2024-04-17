@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/services/chat_service.dart';
 import 'package:frontend/util/colors.dart';
 import 'package:frontend/util/socket_manager.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 // import 'package:socket_io_client/socket_io_client.dart';
 import '../widgets/message_widgets/message_list.dart';
 import '../widgets/message_widgets/text_input_field.dart';
@@ -27,7 +26,8 @@ class _ChatPageState extends State<ChatPage> {
     // TODO: implement initState
     super.initState();
     fetchMessages();
-    connectSocket();
+    SocketManager.initSocket(widget.chatId);
+    SocketManager.receiveMessage();
   }
 
   fetchMessages() async {
@@ -39,15 +39,6 @@ class _ChatPageState extends State<ChatPage> {
               })
             }
         });
-  }
-
-  connectSocket() {
-    Socket? socket = SocketManager.initSocket(widget.chatId);
-    if (socket != null) {
-      socket.on("onMessage", (msg) => {updateMessageList(msg)});
-
-      return () => {socket.off("onMessage")};
-    }
   }
 
   updateMessageList(dynamic Message) {

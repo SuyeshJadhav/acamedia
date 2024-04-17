@@ -116,7 +116,6 @@ class ChatService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   static DateTime? tryParseDateTime(String timestamp) {
-    print(timestamp);
     try {
       if (timestamp.length != 14) {
         throw const FormatException('Invalid timestamp format');

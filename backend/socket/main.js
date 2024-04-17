@@ -22,6 +22,8 @@ const initiateServer = (io) => {
       socket.join(roomName);
 
       socket.on(`emitMessage_${roomName}`, (message) => {
+        console.log(roomName);
+        console.log(message);
         // Emit message to all clients in the room except the sender
         socket.to(roomName).emit("onMessage", message);
       });
