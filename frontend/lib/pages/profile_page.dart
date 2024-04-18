@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/helpers/helper_functions.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 import '../widgets/profile_widgets/logout_btn.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -17,7 +16,6 @@ class ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchData();
   }

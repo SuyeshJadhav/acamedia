@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 SnackBar snackBarError(BuildContext context) {
   return SnackBar(
-    content: const Text('Error: Message is empty'),
+    content: const Text('Message inappropriate!!'),
     behavior: SnackBarBehavior.floating,
     elevation: 10,
     shape: RoundedRectangleBorder(
