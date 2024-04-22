@@ -1,3 +1,7 @@
+const {
+  storeMessage,
+} = require("../controllers/messageController/messageManagement");
+
 const initiateServer = (io) => {
   // io.use((socket, next) => {
   //   // For Socket.IO v2.x, authentication data is not available directly in handshake
@@ -11,7 +15,7 @@ const initiateServer = (io) => {
 
   io.on("connection", (socket) => {
     socket.on("join", (roomName) => {
-      console.log(roomName);
+      // console.log(roomName);
       // Remove listeners and leave rooms when joining a new room
       // Object.keys(socket.rooms)
       //   .filter((room) => room !== socket.id)
@@ -22,8 +26,9 @@ const initiateServer = (io) => {
 
       socket.join(roomName);
       socket.on(`emitMessage`, (message) => {
-        console.log(roomName);
-        console.log(message);
+        // console.log(roomName);
+        // console.log(message);
+        storeMessage(message);
         // Emit message to all clients in the room except the sender
         socket.to(roomName).emit("onMessage", message);
       });
