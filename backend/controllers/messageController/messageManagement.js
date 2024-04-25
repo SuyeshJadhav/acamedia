@@ -9,8 +9,8 @@ const checkMessageValidity = require("./messageValidity");
 *********************************************************/
 const storeMessage = async (
   senderId,
-  senderRole,
-  receiverRole,
+  // senderRole,
+  // receiverRole,
   chatId,
   message
 ) => {
@@ -32,13 +32,13 @@ const storeMessage = async (
       status: 400
     };
 
-  if (!(senderRole === "student" && receiverRole === "student")) {
-    const result = await checkMessageValidity(message.text, senderRole);
-    if (result.status === statusCodes.INAPPROPRIATE_MESSAGE)
-      return { message: result.message, status: 403 };
-    else if (result.status === statusCodes.SERVER_ERROR)
-      return {message: "Error sending message", status: 500};
-  }
+  // if (!(senderRole === "student" && receiverRole === "student")) {
+  //   const result = await checkMessageValidity(message.text, senderRole);
+  //   if (result.status === statusCodes.INAPPROPRIATE_MESSAGE)
+  //     return { message: result.message, status: 403 };
+  //   else if (result.status === statusCodes.SERVER_ERROR)
+  //     return {message: "Error sending message", status: 500};
+  // }
 
   // add new message to message collection, and create if it doesn't exist
   const chatRef = firestoreDB.collection(collectionNames.CHATS).doc(chatId);
