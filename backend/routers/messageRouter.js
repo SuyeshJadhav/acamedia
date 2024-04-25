@@ -6,7 +6,7 @@ const router = Router();
 router.post("/send", async (req, res) => {
   // const { senderId, senderRole, receiverRole, chatId, message } = req.body;
   const { senderId, chatId, message } = req.body;
-  const result = await storeMessage(senderId, senderRole, receiverRole, chatId, message);
+  const result = await storeMessage(senderId, chatId, message);
   res.send(result);
 });
 

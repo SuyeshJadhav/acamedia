@@ -28,7 +28,7 @@ const initiateServer = (io) => {
       socket.on(`emitMessage`, (message) => {
         // console.log(roomName);
         // console.log(message);
-        storeMessage(message);
+        storeMessage(message.sender, roomName, message.message);
         // Emit message to all clients in the room except the sender
         socket.to(roomName).emit("onMessage", message);
       });
