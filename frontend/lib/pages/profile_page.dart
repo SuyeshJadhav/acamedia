@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/helpers/helper_functions.dart';
+import 'package:frontend/util/colors.dart';
+import 'package:provider/provider.dart';
 import '../widgets/profile_widgets/logout_btn.dart';
+
+class DNDSwitchState extends ChangeNotifier {
+  bool _dndEnabled = true;
+  bool get dndEnabled => _dndEnabled;
+  void toggleDND() {
+    _dndEnabled = !_dndEnabled;
+    notifyListeners();
+  }
+}
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -42,6 +53,8 @@ class ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final dndSwitchState = Provider.of<DNDSwitchState>(context);
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 65.0,
@@ -65,8 +78,6 @@ class ProfilePageState extends State<ProfilePage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20.0),
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 GestureDetector(
                   onTap: () {},
@@ -110,8 +121,41 @@ class ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        const Text(
+                          "DND",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Switch(
+                              value: dndSwitchState.dndEnabled,
+                              onChanged: (value) {
+                                dndSwitchState.toggleDND();
+                              },
+                              activeColor: AppColors.bgColor,
+                              inactiveThumbColor: Colors.grey,
+                              activeTrackColor: Colors.lightGreen,
+                              inactiveTrackColor: Colors.grey[300],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.35,
+                  height: MediaQuery.of(context).size.height * 0.34,
                 ),
                 const LogoutBtn()
               ],

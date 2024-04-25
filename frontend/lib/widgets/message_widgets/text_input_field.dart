@@ -1,7 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/util/socket_manager.dart';
