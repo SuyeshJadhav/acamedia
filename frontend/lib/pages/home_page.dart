@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/widgets/home_widgets/home_appbar.dart';
 import 'package:frontend/widgets/home_widgets/home_drawer.dart';
-// import '../widgets/home_widgets/chat_tile.dart';
 import '../widgets/home_widgets/sample_userdata.dart';
 
 class HomePage extends StatefulWidget {
   final String userId;
   const HomePage({super.key, required this.userId});
-
-  // get userId => null;
 
   @override
   HomePageState createState() => HomePageState();

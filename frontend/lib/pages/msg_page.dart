@@ -1,9 +1,11 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/helpers/helper_functions.dart';
+import 'package:frontend/pages/profile_page.dart';
 import 'package:frontend/services/chat_service.dart';
 import 'package:frontend/util/colors.dart';
 import 'package:frontend/util/socket_manager.dart';
-// import 'package:socket_io_client/socket_io_client.dart';
+import 'package:provider/provider.dart';
 import '../widgets/message_widgets/message_list.dart';
 import '../widgets/message_widgets/text_input_field.dart';
 
@@ -21,10 +23,11 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   List<dynamic> messageList = [];
+  String role = '';
+  String id = '';
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchMessages();
     SocketManager.initSocket(widget.chatId, updateMessageList);
@@ -40,14 +43,47 @@ class _ChatPageState extends State<ChatPage> {
               })
             }
         });
+
+    await HelperFunctions.getUserId().then((value) => {
+          if (value != null)
+            {
+              setState(() {
+                id = value;
+              })
+            }
+        });
+
+    await HelperFunctions.getUserData().then((value) => {
+          if (value != null)
+            {
+              setState(() {
+                role = value["role"];
+                // fname = value["fname"];
+                // lname = value["lname"];
+              })
+            }
+        });
   }
 
-  updateMessageList(dynamic message) {
+  void updateMessageList(dynamic message) {
+    if (!mounted) return;
+    final dndSwitchState = Provider.of<DNDSwitchState>(context, listen: false);
+    if (!dndSwitchState.dndEnabled && id != message['sender']) {
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: 0,
+            channelKey: 'channel_1',
+            title: widget.receiverName,
+            body: message['message']['text'],
+            notificationLayout: NotificationLayout.Messaging),
+      );
+    }
+
     setState(() {
-      messageList.add(message);
-      ChatService.sortMessageList(messageList);
-      HelperFunctions.setRecentMessage(
-          widget.chatId, message['message']['text']);
+      if (mounted) {
+        messageList.add(message);
+        ChatService.sortMessageList(messageList);
+      }
     });
   }
 
@@ -61,46 +97,7 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             Expanded(
-              child: MessageList(messages: messageList
-                  // [
-                  //   MessageWidget(
-                  //     sender: 'Sender1',
-                  //     message:
-                  //         'Hello my name is name Hello my name is name Hello my name is namer',
-                  //     timestamp: 'timestamp',
-                  //   ),
-                  //   MessageWidget(
-                  //     sender: 'Sender2',
-                  //     message: 'Hello my name is name',
-                  //     timestamp: 'timestamp',
-                  //   ),
-                  //   MessageWidget(
-                  //     sender: 'Sender1',
-                  //     message: 'Hello my name is name',
-                  //     timestamp: 'timestamp',
-                  //   ),
-                  //   MessageWidget(
-                  //     sender: 'Sender2',
-                  //     message: 'Hello my name is name',
-                  //     timestamp: 'timestamp',
-                  //   ),
-                  //   MessageWidget(
-                  //     sender: 'Sender1',
-                  //     message: 'Hello my name is name',
-                  //     timestamp: 'timestamp',
-                  //   ),
-                  //   MessageWidget(
-                  //     sender: 'Sender1',
-                  //     message: 'Hello my name is name',
-                  //     timestamp: 'timestamp',
-                  //   ),
-                  //   MessageWidget(
-                  //     sender: 'Sender1',
-                  //     message: 'Hello my name is name',
-                  //     timestamp: 'timestamp',
-                  //   ),
-                  // ],
-                  ),
+              child: MessageList(messages: messageList),
             ),
             TextInputField(
               chatId: widget.chatId,
