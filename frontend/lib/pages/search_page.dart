@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/helpers/helper_functions.dart';
+import 'package:frontend/pages/msg_page.dart';
+import 'package:frontend/services/chat_service.dart';
+// import 'package:frontend/services/chat_service.dart';
 import 'package:frontend/services/user_service.dart';
 import '../widgets/search_widgets/filter_button.dart';
 import '../widgets/search_widgets/search_bar.dart';
@@ -13,8 +17,26 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   bool _isLoading = false;
-  String oldQuery = "", query = "", role = "none", branch = "none";
+  String oldQuery = "", query = "", role = "none", branch = "none", userId = "";
   List<dynamic> results = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserId();
+  }
+
+  void getUserId() async {
+    await HelperFunctions.getUserId().then((value) => {
+          if (value != null)
+            {
+              setState(() {
+                userId = value;
+              })
+            }
+        });
+  }
 
   void onChangedQuery(String newQuery) {
     setState(() {
@@ -89,6 +111,12 @@ class _SearchPageState extends State<SearchPage> {
                             child: Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: ListTile(
+                                  onTap: () {
+                                    onPressedChat(
+                                        userId,
+                                        results[index]['userId'],
+                                        "${results[index]['fname']} ${results[index]['lname']}");
+                                  },
                                   leading: CircleAvatar(
                                     radius: 30.0,
                                     child: Text(
@@ -116,7 +144,29 @@ class _SearchPageState extends State<SearchPage> {
       });
     }
   }
+
+  void onPressedChat(
+      String user1Id, String user2Id, String receiverName) async {
+    String chatId = '';
+    await ChatService.openChat(user1Id, user2Id).then((value) => {
+          if (value != null)
+            {chatId = value, _pageRoute(chatId, user2Id, receiverName)}
+        });
+  }
+
+  void _pageRoute(String chatId, String user2Id, String receiverName) {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChatPage(
+                  chatId: chatId,
+                  receiverId: user2Id,
+                  receiverName: receiverName,
+                )));
+  }
 }
+
+// bool isExistingChat(String userId) async {}
 
 class ChatItem {
   String name;

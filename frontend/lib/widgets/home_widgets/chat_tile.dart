@@ -1,14 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/pages/msg_page.dart';
 import 'package:frontend/util/colors.dart';
 import '../chat.dart';
 
-class ChatTile extends StatelessWidget {
+class ChatTile extends StatefulWidget {
   const ChatTile({super.key, required this.chat});
 
   final Chat chat;
 
   @override
+  State<ChatTile> createState() => _ChatTileState();
+}
+
+class _ChatTileState extends State<ChatTile> {
+  String recentMessage = '';
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getRecentMessage(widget.chat.chatId);
+  }
+
+  void getRecentMessage(String chatId) {
+    HelperFunctions.getRecentMessage(chatId).then((value) => {
+          if (value != null)
+            {
+              setState(() {
+                recentMessage = value;
+              })
+            }
+        });
+  }
+
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
@@ -20,15 +43,15 @@ class ChatTile extends StatelessWidget {
           leading: CircleAvatar(
             radius: 35.0,
             child: Text(
-              chat.name
+              widget.chat.name
                   .split(' ')
                   .map((namePart) => namePart[0].toUpperCase())
                   .join(''),
             ),
           ),
-          title: Text(chat.name),
-          subtitle: Text(chat.recentMessage),
-          trailing: chat.hasUnseenMessages
+          title: Text(widget.chat.name),
+          subtitle: Text(recentMessage),
+          trailing: widget.chat.hasUnseenMessages
               ? const Icon(Icons.circle, color: AppColors.blackGreen, size: 11)
               : null,
           onTap: () {
@@ -37,9 +60,10 @@ class ChatTile extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ChatPage(
-                          receiverName: chat.name,
-                          receiverId: chat.receiverId,
-                          chatId: chat.chatId,
+                          receiverName: widget.chat.name,
+                          receiverId: widget.chat.receiverId,
+                          chatId: widget.chat.chatId,
+                          // updateRecentMessage: updateRecentMessage,
                         )));
           },
         ),

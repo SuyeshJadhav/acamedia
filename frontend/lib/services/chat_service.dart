@@ -78,7 +78,7 @@ class ChatService {
                           }
                       })
                 },
-              // print("list: $chatList"),
+              print("list: $chatList"),
             }
         });
     return chatList;
@@ -108,6 +108,43 @@ class ChatService {
     } else {
       return null;
     }
+  }
+
+  static Future<String?> openChat(String user1Id, String user2Id) async {
+    String uri;
+    Uri url;
+    String? chatId = '';
+    uri =
+        "http://10.0.2.2:8000/api/chat/get-id?user1Id=$user1Id&user2Id=$user2Id";
+    url = Uri.parse(uri);
+
+    try {
+      final res = await http.get(url);
+      final body = jsonDecode(res.body);
+      if (body['status'] <= 299 && body['status'] >= 200) {
+        print("Chat ID exists!");
+        chatId = body['chatId'];
+      } else {
+        uri = "http://10.0.2.2:8000/api/chat/create";
+        url = Uri.parse(uri);
+        try {
+          final result = await http.post(url,
+              headers: {'Content-Type': 'application/json'},
+              body: jsonEncode({'user1Id': user1Id, 'user2Id': user2Id}));
+          final chat = jsonDecode(result.body);
+          if (chat['status'] <= 299 && chat['status'] >= 200) {
+            chatId = chat['chatId'];
+          }
+        } catch (e) {
+          print("Error creating chat id: $e");
+          return null;
+        }
+      }
+    } catch (e) {
+      print("Error getting chat data: $e");
+      return null;
+    }
+    return chatId;
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

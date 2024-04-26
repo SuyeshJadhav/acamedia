@@ -28,6 +28,11 @@ class HelperFunctions {
     await prefs.setString('chatList', jsonChatData);
   }
 
+  static void setRecentMessage(String chatId, String recentMessage) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(chatId, recentMessage);
+  }
+
 //Get Data------------------------------------------------------------------------------------------------------
   static Future<bool?> getLoggedInStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -75,6 +80,16 @@ class HelperFunctions {
       return dataList;
     } else {
       // If JSON string is null, return null
+      return null;
+    }
+  }
+
+  static Future<String?> getRecentMessage(String chatId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? recentMessage = prefs.getString(chatId);
+    if (recentMessage != null) {
+      return recentMessage;
+    } else {
       return null;
     }
   }

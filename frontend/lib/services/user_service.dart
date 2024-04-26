@@ -30,6 +30,7 @@ class userService {
     try {
       final res = await http.get(url);
       final body = jsonDecode(res.body);
+      print(body['result']);
 
       return body['result'];
     } catch (e) {

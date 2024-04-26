@@ -4,11 +4,11 @@ class Chat {
     required this.chatId,
     required this.receiverId,
     // required this.imageUrl,
-    required this.recentMessage,
+    // required this.recentMessage,
     this.hasUnseenMessages = false,
   });
 
   final bool hasUnseenMessages;
   // final String imageUrl;
-  final String name, receiverId, chatId, recentMessage;
+  final String name, receiverId, chatId;
 }

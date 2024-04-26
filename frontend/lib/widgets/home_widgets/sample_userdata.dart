@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/helpers/helper_functions.dart';
+import 'package:frontend/services/chat_service.dart';
 import 'package:frontend/widgets/chat.dart';
 import 'package:frontend/widgets/home_widgets/chat_tile.dart';
 
@@ -12,6 +13,7 @@ class Chats extends StatefulWidget {
 
 class _ChatsState extends State<Chats> {
   List<Map<String, dynamic>> chatList = [];
+  String recentMessage = '';
 
   @override
   void initState() {
@@ -33,10 +35,11 @@ class _ChatsState extends State<Chats> {
                 final String name = chatData['name'];
                 final String receiverId = chatData['receiverId'];
                 final String chatId = chatData['chatId'];
-                final String recentMessage = chatData['recentMessage'];
+                // final String recentMessage = chatData['recentMessage'];
+                // print("recent: $recentMessage");
                 Chat chat = Chat(
                     name: name,
-                    recentMessage: recentMessage,
+                    // recentMessage: recentMessage,
                     receiverId: receiverId,
                     chatId: chatId);
                 return ChatTile(chat: chat);
@@ -62,6 +65,16 @@ class _ChatsState extends State<Chats> {
             {
               setState(() {
                 chatList = value;
+              })
+            }
+        });
+    print("Chat1: $chatList");
+    await ChatService.fetchOtherUsers().then((value) => {
+          if (value != null)
+            {
+              setState(() {
+                chatList = value;
+                print("Chat2: $chatList");
               })
             }
         });

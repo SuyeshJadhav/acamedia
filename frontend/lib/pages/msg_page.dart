@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/helpers/helper_functions.dart';
 import 'package:frontend/services/chat_service.dart';
 import 'package:frontend/util/colors.dart';
 import 'package:frontend/util/socket_manager.dart';
@@ -41,10 +42,12 @@ class _ChatPageState extends State<ChatPage> {
         });
   }
 
-  updateMessageList(dynamic Message) {
+  updateMessageList(dynamic message) {
     setState(() {
-      messageList.add(Message);
+      messageList.add(message);
       ChatService.sortMessageList(messageList);
+      HelperFunctions.setRecentMessage(
+          widget.chatId, message['message']['text']);
     });
   }
 
